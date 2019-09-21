@@ -1,5 +1,6 @@
 import socket, os, datetime, smtplib
 import matplotlib.pyplot as plt
+import numpy as np
 
 #------------Clase-----------
 class Sensor:
@@ -44,19 +45,18 @@ def Email(body):
 
 #------------Funciones-------------------------
 def StrToFloat(A):
- for i in range(len(A)): A[i]=float(A[i])
-self.X=[]
+    for i in range(len(A)): A[i]=float(A[i])
 
 def Magnitud(A): return(round((A[0]**2+A[1]**2+A[2]**2)**0.5,2))
 
-def angulo(A):
-    return round(np.arctan(((A[1]**2 + A[2]**2)**0.5)/A[0]) * 180/np.pi,2)
+def angulo(X,Y,Z,i):
+    return round(np.arctan(((Y[i]**2 + Z[i]**2)**0.5)/X[i]) * 180/np.pi,2)
 
 def diferencias(X,Y,Z,i):
-    return (round(((Y[i+1]-Y[i])**2+(Z[i+1]-z[i])**2+(X[2])**2)**0.5,2))
+    return (round(((Y[i+1]-Y[i])**2+(Z[i+1]-Z[i])**2+(X[i+1]-X[i])**2)**0.5,2))
 
 #-------------Creando conexion-------------------
-UDP_IP_ADDRESS = "192.168.1.7"
+UDP_IP_ADDRESS = "192.168.1.110"
 UDP_PORT_NO = 5550
 
 serverSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -70,6 +70,8 @@ Grioscopio= Sensor(1,2,3)
 Tiempo, Acelerometro, Giroscopio, Magnetico, GPS = [],[],[],[],[] #Listas de posicion
 dt=0.01 #Distancia entre datos
 tolacel, tolgir= 2, 20  #newtons, no se
+tolang = 5
+toldif = 5
 flat= False
 GPS=[0,0,0]
 
@@ -87,7 +89,7 @@ for i in range(100):
    if len(Data)>5 and Data[5+4*k]==4:    A=Data[6+4*k:9+4*k]; Giroscopio.append(Magnitud(A))
    #if len(Data)>10 and Data[9+4*k]==5:    A=Data[10+4*k:13+4*k]; Magnetico.append(Magnitud(A))
 
-   if i>0 and (Acelerometro[i]-Acelerometro[i-1]>tolacel) and len(GPS)!=0 and flat == False: # and #or Giroscopio[i]-Giroscopio[i-1]>tolgir) and
+   if i>0 and (Acelerometro[i]-Acelerometro[i-1]>tolacel) and len(GPS)!=0 and flat == False and : # and #or Giroscopio[i]-Giroscopio[i-1]>tolgir) and
 #     print("se cayo", Data[0]);
      Email("Se ha caido su abuelita en x = {}, y = {}, z = {} el dia {} a las {} horas".format(GPS[0], GPS[1], GPS[2],str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]  ))
      flat = True #Para no enviar mas correos
