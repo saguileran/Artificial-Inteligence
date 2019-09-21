@@ -5,16 +5,18 @@ import numpy as np
 #------------Clase-----------
 class Sensor:
   def __init__(self):
-    self.X=[]; self.Y=[]; self.Z=[]; self.A=[]
+    self.X=[]; self.Y=[]; self.Z=[]; self.A=[]; self.Angulo=[]
 
   def getX(self): return(self.X)
   def getY(self): return(self.Y)
   def getZ(self): return(self.Z)
   def getA(self): return(self.A)
+  def getAngulo(self): return(self.Angulo)
 
   def Actualizando(self, x, y, z):
       self.X.append(float(x)); self.Y.append(float(y));
       self.Z.append(float(z)); self.A.append((float(x)**2+float(y)**2+float(z)**2)**0.5)
+      self.Angulo.append(np.arctan(((float(y)**2 + float(z)**2)**0.5)/float(x)) * 180/np.pi) #Angulo theta, esfericas
 ###Se puede modificar la parte  de append para que las listas tengan una longitud constante###
 
 #-----------Creando email-----------
@@ -43,15 +45,11 @@ def Email(body):
    print ('Email sent!')
 
 #------------Funciones-------------------------
-def angulo(X,Y,Z,i):
-    return round(np.arctan(((Y[i]**2 + Z[i]**2)**0.5)/X[i]) * 180/np.pi,2)
-
 def diferencias(X,Y,Z,i):
     return round(((Y[i+1]-Y[i])**2+(Z[i+1]-Z[i])**2+(X[i+1]-X[i])**2)**0.5,2)
 
-
 #-------------Creando conexion-------------------
-UDP_IP_ADDRESS = "192.168.1.110"
+UDP_IP_ADDRESS = "192.168.1.112"
 UDP_PORT_NO = 5550
 
 serverSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -59,16 +57,16 @@ serverSock.bind((UDP_IP_ADDRESS, UDP_PORT_NO))
 
 #--------------Tomando Datos---------------------------
 #dt=0.01 #Distancia entre datos
-tolacel, tolgir= 2, 20  #newtons, no se
+tolacel, tolgir= 2, 20  #m/s**2", en principio
 tolang = 5
 toldif = 5
-flat= False
+flag= False
 
 GPS = Sensor()
 Acelerometro = Sensor()
 Giroscopio = Sensor()
 
-for i in range(1000):
+for i in range(100):
 
    data, addr = serverSock.recvfrom(1024)
    Data = data.decode("utf-8").split(",")
@@ -80,20 +78,14 @@ for i in range(1000):
    else: k=0
    if Data[1+4*k]==' 3':   Acelerometro.Actualizando(Data[2+4*k], Data[3+4*k], Data[4+4*k])
    if len(Data)>5 and Data[5+4*k]==4:    Grioscopio.Actualizando(Data[6+4*k], Data[7+4*k], Data[8+4*k])
-   #Sensor.Actualizando(Giroscopio)
-  #if len(Data)>10 and Data[9+4*k]==5:    A=Data[10+4*k:13+4*k]; Magnetico.append(Magnitud(A))
 
-<<<<<<< HEAD
-#   if i>0 and (Acelerometro[i]-Acelerometro[i-1]>tolacel) and flat == False: # and #or Giroscopio[i]-Giroscopio[i-1]>tolgir) and
-=======
-   if i>0 and (Acelerometro[i]-Acelerometro[i-1]>tolacel) and len(GPS)!=0 and flat == False and : # and #or Giroscopio[i]-Giroscopio[i-1]>tolgir) and
->>>>>>> f69fe72c4854b2ee442fce937a25c6c24848b5b8
+#   if i>0 and (Acelerometro.getX[i]-Acelerometro[i-1]>tolacel) and flat == False: # and #or Giroscopio[i]-Giroscopio[i-1]>tolgir) and
 #     print("se cayo", Data[0]);
 #     Email("Se ha caido su abuelita en x = {}, y = {}, z = {} el dia {} a las {} horas".format(GPS[0], GPS[1], GPS[2],str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]  ))
 #     flat = True #Para no enviar mas correos
 
-   print("Datos:", GPS.getX(), GPS.getY(), GPS.getZ())
-   print(" ")
+print("Datos:", Acelerometro.getAngulo()) #, GPS.getY(), GPS.getZ())
+#print(" ")
 #   print(" ")
 #print("Tiempo: ", Tiempo);
 #print("Acelrometro: ", Acelerometro);
