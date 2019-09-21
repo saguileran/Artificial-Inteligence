@@ -45,8 +45,15 @@ def Email(body):
 #------------Funciones-------------------------
 def StrToFloat(A):
  for i in range(len(A)): A[i]=float(A[i])
-self.X=[
+self.X=[]
+
 def Magnitud(A): return(round((A[0]**2+A[1]**2+A[2]**2)**0.5,2))
+
+def angulo(A):
+    return round(np.arctan(((A[1]**2 + A[2]**2)**0.5)/A[0]) * 180/np.pi,2)
+
+def diferencias(X,Y,Z,i):
+    return (round(((Y[i+1]-Y[i])**2+(Z[i+1]-z[i])**2+(X[2])**2)**0.5,2))
 
 #-------------Creando conexion-------------------
 UDP_IP_ADDRESS = "192.168.1.7"
