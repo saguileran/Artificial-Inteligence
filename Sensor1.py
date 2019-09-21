@@ -42,25 +42,16 @@ def Email(body):
    server.close()
    print ('Email sent!')
 
-<<<<<<< HEAD
-#-------------Creando conexion-------------------
-UDP_IP_ADDRESS = "192.168.1.112"
-=======
 #------------Funciones-------------------------
-def StrToFloat(A):
-    for i in range(len(A)): A[i]=float(A[i])
-
-def Magnitud(A): return(round((A[0]**2+A[1]**2+A[2]**2)**0.5,2))
-
 def angulo(X,Y,Z,i):
     return round(np.arctan(((Y[i]**2 + Z[i]**2)**0.5)/X[i]) * 180/np.pi,2)
 
 def diferencias(X,Y,Z,i):
-    return (round(((Y[i+1]-Y[i])**2+(Z[i+1]-Z[i])**2+(X[i+1]-X[i])**2)**0.5,2))
+    return round(((Y[i+1]-Y[i])**2+(Z[i+1]-Z[i])**2+(X[i+1]-X[i])**2)**0.5,2)
+
 
 #-------------Creando conexion-------------------
 UDP_IP_ADDRESS = "192.168.1.110"
->>>>>>> f69fe72c4854b2ee442fce937a25c6c24848b5b8
 UDP_PORT_NO = 5550
 
 serverSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
