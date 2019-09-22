@@ -5,18 +5,28 @@ import numpy as np
 #------------Clase-----------
 class Sensor:
   def __init__(self):
-    self.X=[]; self.Y=[]; self.Z=[]; self.A=[]; self.Angulo=[]
+    self.X=[];  self.Y=[];  self.Z=[];  self.A=[];  self.Angulo=[]
+    self.dX=[]; self.dY=[]; self.dZ=[]; self.dA=[]; self.dAngulo=[]
 
-  def getX(self): return(self.X)
-  def getY(self): return(self.Y)
-  def getZ(self): return(self.Z)
-  def getA(self): return(self.A)
-  def getAngulo(self): return(self.Angulo)
+  def getX(self): return(self.X);        	def getdX(self): return(self.dX);
+  def getY(self): return(self.Y);        	def getdY(self): return(self.dY);
+  def getZ(self): return(self.Z);        	def getdZ(self): return(self.dZ);
+  def getA(self): return(self.A);               def getdA(self): return(self.dA);
+  def getAngulo(self): return(self.Angulo);     def getdAngulo(self): return(self.dAngulo);
+
 
   def Actualizando(self, x, y, z):
-      self.X.append(float(x)); self.Y.append(float(y));
-      self.Z.append(float(z)); self.A.append((float(x)**2+float(y)**2+float(z)**2)**0.5)
-      if abs(float(x))>0.0001: self.Angulo.append(np.arctan(((float(y)**2 + float(z)**2)**0.5)/float(x)) * 180/np.pi) #Angulo theta, esfericas
+      R=float(y)**2 + float(z)**2+float(x)**2)**0.5
+      self.X.append(float(x));      self.Y.append(float(y));      self.Z.append(float(z));
+      self.A.append((float(x)**2+float(y)**2+float(z)**2)**0.5)
+      self.Angulo.append(acos(float(z)/R) * 180/np.pi) #Angulo theta de esfericas en grados
+      #if abs(float(x))>0.0001: self.Angulo.append(np.arctan(((float(y)**2 + float(z)**2)**0.5)/float(x)) * 180/np.pi) #Angulo theta, esfericas
+      if len(self.X)>2:
+	self.dX.append(self.X[-1]-self.X[-2])
+	self.dT.append(self.Y[-1]-self.Y[-2])
+	self.dZ.append(self.Z[-1]-self.Z[-2])
+	self.dA.append(self.A[-1]-self.A[-2])
+	self.dAngulo.append(self.Angulo[-1]-self.Angulo[-2])
 
 ###Se puede modificar la parte  de append para que las listas tengan una longitud constante###
 #-----------Creando email-----------
@@ -67,9 +77,7 @@ serverSock.bind((UDP_IP_ADDRESS, UDP_PORT_NO))
 tolang, toldif = 5, 5
 flag= False
 
-GPS = Sensor()
-Acelerometro = Sensor()
-Giroscopio = Sensor()
+GPS = Sensor();   Acelerometro = Sensor();   Giroscopio = Sensor();
 
 for i in range(100):
 
@@ -83,8 +91,8 @@ for i in range(100):
    else: k=0
    if Data[1+4*k]==' 3':   Acelerometro.Actualizando(Data[2+4*k], Data[3+4*k], Data[4+4*k])
    if len(Data)>5 and Data[5+4*k]==4:    Grioscopio.Actualizando(Data[6+4*k], Data[7+4*k], Data[8+4*k])
-   Dif = list(Diferencias(Acelerometro))
-   print(Dif[0])
+#   Dif = list(Diferencias(Acelerometro))
+   print(Acelerometro.getdZ())
 #   if (Dif[2]>toldif or abs(Dif[3])>tolang)  and flag == False: 
 #     print("se cayo", Data[0]);
   #   Email("Se ha caido su abuelita en x = {}, y = {}, z = {} el dia {} a las {} horas".format(GPS[0], GPS[1], GPS[2], str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]  ))
