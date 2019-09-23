@@ -79,10 +79,9 @@ def Email(body):
     server.close()
     print ('Email sent!')
 
-
 #-------------Creando conexion-------------------
 UDP_IP_ADDRESS = "192.168.1.14"
-UDP_PORT_NO = 5552
+UDP_PORT_NO = 5551
 
 serverSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 #serverSock.close()
@@ -90,39 +89,46 @@ serverSock.bind((UDP_IP_ADDRESS, UDP_PORT_NO))
 
 #--------------Tomando Datos---------------------------
 flag, caida= False, False
-GPS = Sensor()
-Acelerometro = Sensor(); Girsocopio = Sensor()
+GPS = Sensor(); Acelerometro = Sensor(); Girsocopio = Sensor()
 Gravedad = Sensor() #83
 Aceleracion_lineal= Sensor() #82
+t=0
 
 with raw(sys.stdin):
     with nonblocking(sys.stdin):
         while True:
             try:
                 keypressed = sys.stdin.read(1)
-                data, addr = serverSock.recvfrom(1024)# 8192)
+                data, addr = serverSock.recvfrom(1024)
                 Data = data.decode("utf-8").split(",")
 
-                print(Acelerometro.getA())
                 if Data.count(' 1')>0:  GPS.Actualizando(Data[Data.index(' 1')+1], Data[Data.index(' 1')+2], Data[Data.index(' 1')+3]);  k=1
                 else: k=0
                 if Data[1+4*k]==' 3':   Acelerometro.Actualizando(Data[2+4*k], Data[3+4*k], Data[4+4*k])
                 if len(Data)>5 and Data[5+4*k]==4:    Grioscopio.Actualizando(Data[6+4*k], Data[7+4*k], Data[8+4*k])
+
+                #print(Acelerometro.getdA()[-1])
+                #plt.scatter(t,float(Acelerometro.getdA()[-1]))
+                #plt.pause(0.001)
+                #t+=1
                 
                 #--- Pruebas con el acelerometro lineal y la gravedad
                 if Data.count(' 83')>0 and Data.count(' 82')>0:
                     grav=np.array([float(Data[Data.index(' 83')+1]),float(Data[Data.index(' 83')+2]),float(Data[Data.index(' 83')+3])])
                     acclin=np.array([float(Data[Data.index(' 82')+1]),float(Data[Data.index(' 82')+2]),float(Data[Data.index(' 82')+3])])
-                    if np.linalg.norm(acclin)>8:
+                    if np.linalg.norm(acclin)>8: #Prueba con gravity y vector aceleracion
                         coseno=np.dot(grav,acclin)/(np.linalg.norm(grav)*np.linalg.norm(acclin))
                         if coseno < -0.90:
                             caida=True
                             print("Caida! Coseno: "+ str(coseno)+ " norma: "+ str(np.linalg.norm(acclin)))
-                if caida and not flag:
-                    #print("")
-                    print("Atencion, ha ocurrido una caida!")
+                #----Segundo Detector------
+                if abs(Acelerometro.getdA()[-1]) > 3:
+                    caida1 = True
+                #--------Confirmacion de caida------------
+                if caida and (not flag): # and caida1:
+                    print("Atention, a fall has occured!")
                     #print(GPS.getY())
-                    Email("Se ha caido su anciano en la latitud {}, longitud {} y altura  = {} el dia {} a las {} horas. \n Para ubicar esta posicion ingrese la latitud y longitud en el siguiente link https://www.gps-coordinates.net".format(GPS.getX()[-1], GPS.getY()[-1], GPS.getZ()[-1], str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]  ))
+                    Email("Your grandparent has fallen at latitude {}, longitude {} and height  = {} the day {} at {} time. \n To locate this position go to https://www.gps-coordinates.net and enter the latitude and longitude".format(GPS.getX()[-1], GPS.getY()[-1], GPS.getZ()[-1], str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]))
                     flag = True #Para no enviar mas correos
                 #print(repr(keypressed))
                 if keypressed=="x":
@@ -131,3 +137,4 @@ with raw(sys.stdin):
                 print('Not ready')
 
 
+plt.show()
