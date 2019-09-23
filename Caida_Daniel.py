@@ -28,7 +28,8 @@ print("Presione la tecla x para salir.")
 #------------Clase-----------
 class Sensor:
     def __init__(self):
-        v=np.zeros(10)
+        v=list(np.zeros(10))
+
         self.X=v; self.Y=v; self.Z=v; self.A=v; self.Angulo=v;
         self.dX=v; self.dY=v; self.dZ=v; self.dA=v; self.dAngulo=v
         
@@ -44,6 +45,7 @@ class Sensor:
     def getdAngulo(self): return(self.dAngulo)
 
     def Actualizando(self, x, y, z):
+        x,y,z = float(x), float(y), float(z)
         self.X.pop(0); self.Y.pop(0); self.Z.pop(0); self.A.pop(0); self.Angulo.pop(0) #elimina el primero
         self.dX.pop(0); self.dY.pop(0); self.dZ.pop(0); self.dA.pop(0); self.dAngulo.pop(0) #elimina el primero
         
@@ -63,7 +65,7 @@ def Email(body):
     sent_from = gmail_user
     to = ['ddfulaa@unal.edu.co', 'mstorresh@unal.edu.co','gjalvarezc@unal.edu.co', 'saguileran@unal.edu.co']
     subject = 'OMG Super Important Message'
-    body = 'Ohhhh my joint has fallen'
+   # body = 'Ohhhh my joint has fallen'
 
     email_text = """\
     From: %s
@@ -91,6 +93,7 @@ serverSock.bind((UDP_IP_ADDRESS, UDP_PORT_NO))
 #--------------Tomando Datos---------------------------
 flag, caida= False, False
 GPS = Sensor()
+Acelerometro = Sensor(); Girsocopio = Sensor()
 Gravedad = Sensor() #83
 Aceleracion_lineal= Sensor() #82
 
@@ -99,9 +102,18 @@ with raw(sys.stdin):
         while True:
             try:
                 keypressed = sys.stdin.read(1)
-                data, addr = serverSock.recvfrom(8192)
+                data, addr = serverSock.recvfrom(1024)# 8192)
                 Data = data.decode("utf-8").split(",")
-                print(GPS.getx)
+                print(Data)
+                print("")
+
+                if Data.count(' 1')>0:
+                    GPS.Actualizando(Data[Data.index(' 1')+1], Data[Data.index(' 1')+2], Data[Data.index(' 1')+3]);  k=1
+                    print(Data[Data.index(' 1')+1], Data[Data.index(' 1')+2], Data[Data.index(' 1')+3])
+                else: k=0
+                if Data[1+4*k]==' 3':   Acelerometro.Actualizando(Data[2+4*k], Data[3+4*k], Data[4+4*k])
+                if len(Data)>5 and Data[5+4*k]==4:    Grioscopio.Actualizando(Data[6+4*k], Data[7+4*k], Data[8+4*k])
+                
                 #--- Pruebas con el acelerometro lineal y la gravedad
                 if Data.count(' 83')>0 and Data.count(' 82')>0:
                     grav=np.array([float(Data[Data.index(' 83')+1]),float(Data[Data.index(' 83')+2]),float(Data[Data.index(' 83')+3])])
@@ -112,8 +124,10 @@ with raw(sys.stdin):
                             caida=True
                             print("Caida! Coseno: "+ str(coseno)+ " norma: "+ str(np.linalg.norm(acclin)))
                 if caida and not flag:
+                    #print("")
                     print("Atencion, ha ocurrido una caida!")
-                    Email("Se ha caido su abuelita en la posicion x = {}, y = {}, z = {} el dia {} a las {} horas".format(GPS.getX()[-1], GPS.getY()[-1], GPS.getZ()  [-1], str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]  ))
+                    print(GPS.getX())
+                    Email("Se ha caido su anciano en la latitud {}, longitud {} y altura  = {} el dia {} a las {} horas. \n Para ubicar esta posicion ingrese la latitud y longitud en el siguiente link https://www.gps-coordinates.net".format(GPS.getX()[-1], GPS.getY()[-1], GPS.getZ()[-1], str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]  ))
                     flag = True #Para no enviar mas correos
                 #print(repr(keypressed))
                 if keypressed=="x":
