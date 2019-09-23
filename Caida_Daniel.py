@@ -28,10 +28,8 @@ print("Presione la tecla x para salir.")
 #------------Clase-----------
 class Sensor:
     def __init__(self):
-        v=list(np.zeros(10))
-
-        self.X=v; self.Y=v; self.Z=v; self.A=v; self.Angulo=v;
-        self.dX=v; self.dY=v; self.dZ=v; self.dA=v; self.dAngulo=v
+        self.X=list(np.zeros(10)); self.Y=list(np.zeros(10)); self.Z=list(np.zeros(10)); self.A=list(np.zeros(10)); self.Angulo=list(np.zeros(10));
+        self.dX=list(np.zeros(10)); self.dY=list(np.zeros(10)); self.dZ=list(np.zeros(10)); self.dA=list(np.zeros(10)); self.dAngulo=list(np.zeros(10))
         
     def getX(self): return(self.X)
     def getY(self): return(self.Y)
@@ -44,8 +42,8 @@ class Sensor:
     def getdA(self): return(self.dA)
     def getdAngulo(self): return(self.dAngulo)
 
-    def Actualizando(self, x, y, z):
-        x,y,z = float(x), float(y), float(z)
+    def Actualizando(self,x1, y1, z1):
+        x,y,z = float(x1), float(y1), float(z1)
         self.X.pop(0); self.Y.pop(0); self.Z.pop(0); self.A.pop(0); self.Angulo.pop(0) #elimina el primero
         self.dX.pop(0); self.dY.pop(0); self.dZ.pop(0); self.dA.pop(0); self.dAngulo.pop(0) #elimina el primero
         
@@ -104,12 +102,9 @@ with raw(sys.stdin):
                 keypressed = sys.stdin.read(1)
                 data, addr = serverSock.recvfrom(1024)# 8192)
                 Data = data.decode("utf-8").split(",")
-                print(Data)
-                print("")
 
-                if Data.count(' 1')>0:
-                    GPS.Actualizando(Data[Data.index(' 1')+1], Data[Data.index(' 1')+2], Data[Data.index(' 1')+3]);  k=1
-                    print(Data[Data.index(' 1')+1], Data[Data.index(' 1')+2], Data[Data.index(' 1')+3])
+                print(Acelerometro.getA())
+                if Data.count(' 1')>0:  GPS.Actualizando(Data[Data.index(' 1')+1], Data[Data.index(' 1')+2], Data[Data.index(' 1')+3]);  k=1
                 else: k=0
                 if Data[1+4*k]==' 3':   Acelerometro.Actualizando(Data[2+4*k], Data[3+4*k], Data[4+4*k])
                 if len(Data)>5 and Data[5+4*k]==4:    Grioscopio.Actualizando(Data[6+4*k], Data[7+4*k], Data[8+4*k])
@@ -126,7 +121,7 @@ with raw(sys.stdin):
                 if caida and not flag:
                     #print("")
                     print("Atencion, ha ocurrido una caida!")
-                    print(GPS.getX())
+                    #print(GPS.getY())
                     Email("Se ha caido su anciano en la latitud {}, longitud {} y altura  = {} el dia {} a las {} horas. \n Para ubicar esta posicion ingrese la latitud y longitud en el siguiente link https://www.gps-coordinates.net".format(GPS.getX()[-1], GPS.getY()[-1], GPS.getZ()[-1], str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]  ))
                     flag = True #Para no enviar mas correos
                 #print(repr(keypressed))
