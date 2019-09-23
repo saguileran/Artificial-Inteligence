@@ -30,7 +30,7 @@ class Sensor:
     def __init__(self):
         self.X=list(np.zeros(10)); self.Y=list(np.zeros(10)); self.Z=list(np.zeros(10)); self.A=list(np.zeros(10)); self.Angulo=list(np.zeros(10));
         self.dX=list(np.zeros(10)); self.dY=list(np.zeros(10)); self.dZ=list(np.zeros(10)); self.dA=list(np.zeros(10)); self.dAngulo=list(np.zeros(10))
-        
+
     def getX(self): return(self.X)
     def getY(self): return(self.Y)
     def getZ(self): return(self.Z)
@@ -46,7 +46,7 @@ class Sensor:
         x,y,z = float(x1), float(y1), float(z1)
         self.X.pop(0); self.Y.pop(0); self.Z.pop(0); self.A.pop(0); self.Angulo.pop(0) #elimina el primero
         self.dX.pop(0); self.dY.pop(0); self.dZ.pop(0); self.dA.pop(0); self.dAngulo.pop(0) #elimina el primero
-        
+
         self.X.append(float(x)); self.Y.append(float(y)); self.Z.append(float(z))
         self.A.append((float(x)**2+float(y)**2+float(z)**2)**0.5)
         self.Angulo.append(np.arccos(z/(y**2 + z**2+x**2)**0.5) * 180/np.pi) #Angulo theta de esfericas en grados
@@ -56,26 +56,26 @@ class Sensor:
         self.dAngulo.append(self.Angulo[-1]-self.Angulo[-2])
 
 #-----------Creando email-----------
-def Email(body):
+def Email(sent_body):
     gmail_user = 'iaun2019pe@gmail.com'
     gmail_password = 'Qwert54321'
 
     sent_from = gmail_user
-    to = ['ddfulaa@unal.edu.co', 'mstorresh@unal.edu.co','gjalvarezc@unal.edu.co', 'saguileran@unal.edu.co']
-    subject = 'OMG Super Important Message'
+    sent_to = ['ddfulaa@unal.edu.co', 'mstorresh@unal.edu.co','gjalvarezc@unal.edu.co', 'saguileran@unal.edu.co']
+    sent_subject = 'OMG Super Important Message'
    # body = 'Ohhhh my joint has fallen'
 
     email_text = """\
-    From: %s
-    To: %s
-    Subject: %s
+From: %s
+To: %s
+Subject: %s
 
-    %s
-    """ % (sent_from, ", ".join(to), subject, body)
+%s
+""" % (sent_from, ", ".join(sent_to), sent_subject, sent_body)
     server = smtplib.SMTP_SSL('smtp.gmail.com',465)
     server.ehlo()
     server.login(gmail_user, gmail_password)
-    server.sendmail(sent_from, to, email_text)
+    server.sendmail(sent_from, sent_to, email_text)
     server.close()
     print ('Email sent!')
 
@@ -111,7 +111,7 @@ with raw(sys.stdin):
                 #plt.scatter(t,float(Acelerometro.getdA()[-1]))
                 #plt.pause(0.001)
                 #t+=1
-                
+
                 #--- Pruebas con el acelerometro lineal y la gravedad
                 if Data.count(' 83')>0 and Data.count(' 82')>0:
                     grav=np.array([float(Data[Data.index(' 83')+1]),float(Data[Data.index(' 83')+2]),float(Data[Data.index(' 83')+3])])
