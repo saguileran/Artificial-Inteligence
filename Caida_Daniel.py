@@ -93,6 +93,7 @@ GPS = Sensor(); Acelerometro = Sensor(); Girsocopio = Sensor()
 Gravedad = Sensor() #83
 Aceleracion_lineal= Sensor() #82
 t=0
+tolacel, tolgrav = 3, 8
 
 with raw(sys.stdin):
     with nonblocking(sys.stdin):
@@ -116,13 +117,13 @@ with raw(sys.stdin):
                 if Data.count(' 83')>0 and Data.count(' 82')>0:
                     grav=np.array([float(Data[Data.index(' 83')+1]),float(Data[Data.index(' 83')+2]),float(Data[Data.index(' 83')+3])])
                     acclin=np.array([float(Data[Data.index(' 82')+1]),float(Data[Data.index(' 82')+2]),float(Data[Data.index(' 82')+3])])
-                    if np.linalg.norm(acclin)>8: #Prueba con gravity y vector aceleracion
+                    if np.linalg.norm(acclin)>tolgrav: #Prueba con gravity y vector aceleracion
                         coseno=np.dot(grav,acclin)/(np.linalg.norm(grav)*np.linalg.norm(acclin))
                         if coseno < -0.90:
                             caida=True
                             print("Caida! Coseno: "+ str(coseno)+ " norma: "+ str(np.linalg.norm(acclin)))
                 #----Segundo Detector------
-                if abs(Acelerometro.getdA()[-1]) > 3:
+                if abs(Acelerometro.getdA()[-1]) > tolacel:
                     caida1 = True
                 #--------Confirmacion de caida------------
                 if caida and (not flag): # and caida1:
