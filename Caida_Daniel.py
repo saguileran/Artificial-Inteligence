@@ -93,7 +93,7 @@ GPS = Sensor(); Acelerometro = Sensor(); Girsocopio = Sensor()
 Gravedad = Sensor() #83
 Aceleracion_lineal= Sensor() #82
 t=0
-tolacel, tolgrav = 3, 8
+tolacel, tolgrav, tolang = 3, 9, 4
 
 with raw(sys.stdin):
     with nonblocking(sys.stdin):
@@ -108,28 +108,33 @@ with raw(sys.stdin):
                 if Data[1+4*k]==' 3':   Acelerometro.Actualizando(Data[2+4*k], Data[3+4*k], Data[4+4*k])
                 if len(Data)>5 and Data[5+4*k]==4:    Grioscopio.Actualizando(Data[6+4*k], Data[7+4*k], Data[8+4*k])
 
-                #print(Acelerometro.getdA()[-1])
+                #print(Acelerometro.getdAngulo()[-1])
                 #plt.scatter(t,float(Acelerometro.getdA()[-1]))
-                #plt.pause(0.001)
-                #t+=1
+                #plt.pause(0.001);                #t+=1
 
                 #--- Pruebas con el acelerometro lineal y la gravedad
                 if Data.count(' 83')>0 and Data.count(' 82')>0:
-                    grav=np.array([float(Data[Data.index(' 83')+1]),float(Data[Data.index(' 83')+2]),float(Data[Data.index(' 83')+3])])
-                    acclin=np.array([float(Data[Data.index(' 82')+1]),float(Data[Data.index(' 82')+2]),float(Data[Data.index(' 82')+3])])
-                    if np.linalg.norm(acclin)>tolgrav: #Prueba con gravity y vector aceleracion
-                        coseno=np.dot(grav,acclin)/(np.linalg.norm(grav)*np.linalg.norm(acclin))
+                    grav = np.array([float(Data[Data.index(' 83')+1]),float(Data[Data.index(' 83')+2]),float(Data[Data.index(' 83')+3])])
+                    acclin = np.array([float(Data[Data.index(' 82')+1]),float(Data[Data.index(' 82')+2]),float(Data[Data.index(' 82')+3])])
+                    
+                    #plt.scatter(t,float(np.linalg.norm(acclin)))
+                    #plt.pause(0.001);                    t+=1
+                                
+                    if np.linalg.norm(acclin) > tolgrav: #Prueba con gravity y vector aceleracion
+                        coseno = np.dot(grav,acclin)/(np.linalg.norm(grav)*np.linalg.norm(acclin))
                         if coseno < -0.90:
-                            caida=True
-                            print("Caida! Coseno: "+ str(coseno)+ " norma: "+ str(np.linalg.norm(acclin)))
+                            caida = True
+                            #print("Caida! Coseno: "+ str(coseno)+ " norma: "+ str(np.linalg.norm(acclin)))
                 #----Segundo Detector------
                 if abs(Acelerometro.getdA()[-1]) > tolacel:
                     caida1 = True
+                #----Tercer Detector------
+                if abs(Acelerometro.getdAngulo()[-1]) > tolang:
+                    caida2 = True
                 #--------Confirmacion de caida------------
-                if caida and (not flag): # and caida1:
+                if caida and (not flag) and caida1 and caida2:
                     print("Atention, a fall has occured!")
-                    #print(GPS.getY())
-                    Email("Your grandparent has fallen at latitude {}, longitude {} and height  = {} the day {} at {} time. \n To locate this position go to https://www.gps-coordinates.net and enter the latitude and longitude".format(GPS.getX()[-1], GPS.getY()[-1], GPS.getZ()[-1], str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]))
+                    Email("Your grandparent has fallen at latitude {}, longitude {} and height  = {} the day {} at {} time. To locate this position go to https://www.gps-coordinates.net and enter the latitude and longitude.".format(GPS.getX()[-1], GPS.getY()[-1], GPS.getZ()[-1], str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]))
                     flag = True #Para no enviar mas correos
                 #print(repr(keypressed))
                 if keypressed=="x":
