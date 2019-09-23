@@ -80,7 +80,7 @@ Subject: %s
     print ('Email sent!')
 
 #-------------Creando conexion-------------------
-UDP_IP_ADDRESS = "192.168.1.14"
+UDP_IP_ADDRESS = "10.203.146.49"
 UDP_PORT_NO = 5551
 
 serverSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -89,7 +89,7 @@ serverSock.bind((UDP_IP_ADDRESS, UDP_PORT_NO))
 
 #--------------Tomando Datos---------------------------
 flag, caida= False, False
-GPS = Sensor(); Acelerometro = Sensor(); Girsocopio = Sensor()
+GPS = Sensor(); Acelerometro = Sensor(); Giroscopio = Sensor()
 Gravedad = Sensor() #83
 Aceleracion_lineal= Sensor() #82
 t=0
@@ -106,7 +106,7 @@ with raw(sys.stdin):
                 if Data.count(' 1')>0:  GPS.Actualizando(Data[Data.index(' 1')+1], Data[Data.index(' 1')+2], Data[Data.index(' 1')+3]);  k=1
                 else: k=0
                 if Data[1+4*k]==' 3':   Acelerometro.Actualizando(Data[2+4*k], Data[3+4*k], Data[4+4*k])
-                if len(Data)>5 and Data[5+4*k]==4:    Grioscopio.Actualizando(Data[6+4*k], Data[7+4*k], Data[8+4*k])
+                if len(Data)>5 and Data[5+4*k]==4:    Giroscopio.Actualizando(Data[6+4*k], Data[7+4*k], Data[8+4*k])
 
                 #print(Acelerometro.getdAngulo()[-1])
                 #plt.scatter(t,float(Acelerometro.getdA()[-1]))
