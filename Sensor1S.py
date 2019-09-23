@@ -25,7 +25,7 @@ class Sensor:
     self.X.append(x);      self.Y.append(y);      self.Z.append(z);
     self.A.append((x**2+y**2+z**2)**0.5)
     self.Angulo.append(np.arccos(z/(y**2 + z**2+x**2)**0.5) * 180/np.pi) #Angulo theta de esfericas en grados
-    #if abs(x)>0.0001: self.Angulo.append(np.arctan(((y**2 + z**2)**0.5)/x) * 180/np.pi) #Angulo theta, esfericas
+
     if len(self.X)>1:
       self.dX.append(self.X[-1]-self.X[-2])
       self.dY.append(self.Y[-1]-self.Y[-2])
@@ -33,31 +33,15 @@ class Sensor:
       self.dA.append(self.A[-1]-self.A[-2])
       self.dAngulo.append(self.Angulo[-1]-self.Angulo[-2])
 
-    self.X=[]; self.Y=[]; self.Z=[]; self.A=[]; self.Angulo=[]; self.difX=[]; self.difY=[]; self.difZ=[]; self.difAngulo=[];
-
   def getX(self): return(self.X)
   def getY(self): return(self.Y)
   def getZ(self): return(self.Z)
   def getA(self): return(self.A)
   def getAngulo(self): return(self.Angulo)
-  def getdifX(self): return(self.difX)
-  def getdifY(self): return(self.difY)
-  def getdifZ(self): return(self.difZ)
-  def getdifAngulo(self): return(self.difAngulo)
-
-  def Actualizando(self, x, y, z):
-      self.X.append(float(x)); self.Y.append(float(y));
-      self.Z.append(float(z)); self.A.append((float(x)**2+float(y)**2+float(z)**2)**0.5)
-      if abs(float(x))>0.0001: self.Angulo.append(np.arctan(((float(y)**2 + float(z)**2)**0.5)/float(x)) * 180/np.pi) #Angulo theta, esfericas
-      else: self.Angulo.append(90.)
-      if len(self.X)>1: self.difX.append(self.X[-1]-self.X[-2]); self.difY.append(self.Y[-1]-self.Y[-2]); self.difZ.append(self.Z[-1]-self.Z[-2]); self.difAngulo.append(self.Angulo[-1]-self.Angulo[-2]);
-  
-  def AcumuladorDeDiferencias(self, n): #El n nos indica la cantidad de puntos que se van a considerar para calcular las diferencias
-    if len(self.difX)>=n:
-        return [sum(self.difX[len(self.difX)-n-1:len(self.difX)-1]), sum(self.difY[len(self.difY)-n-1:len(self.difY)-1]), sum(self.difZ[len(self.difZ)-n-1:len(self.difZ)-1]), sum(self.difAngulo[len(self.difAngulo)-n-1:len(self.difAngulo)-1])]        
-    else:
-        return [sum(self.difX), sum(self.difY), sum(self.difZ), sum(self.difAngulo)]
-
+  def getdX(self): return(self.dX)
+  def getdY(self): return(self.dY)
+  def getdZ(self): return(self.dZ)
+  def getdAngulo(self): return(self.dAngulo)
 
 ###Se puede modificar la parte  de append para que las listas tengan una longitud constante###
 #-----------Creando email-----------
@@ -66,7 +50,7 @@ def Email(body):
    gmail_password = 'Qwert54321'
 
    sent_from = gmail_user
-   to = ['ddfulaa@unal.edu.co']
+   to = ['ddfulaa@unal.edu.co', 'saguileran@unal.edu.co', 'mstorresh@unal.edu.co','gjalvarezc@unal.edu.co']
    subject = 'OMG Super Important Message'
    #body = 'Ohhhh my joint has fallen'
 
@@ -89,23 +73,18 @@ def Email(body):
 
 UDP_IP_ADDRESS = "192.168.1.14";    UDP_PORT_NO = 5555
 
-UDP_PORT_NO = 5555
-
 serverSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 serverSock.bind((UDP_IP_ADDRESS, UDP_PORT_NO))
 
 #--------------Tomando Datos---------------------------
 #dt=0.01 #Distancia entre datos
 tolang, toldif = 5, 5
-NoDatos = 10**4
+NoDatos = 10**3
 flag= False
 
 GPS = Sensor();   Acelerometro = Sensor();   Giroscopio = Sensor();
 
-#for i in range(NoDatos):
-
-for i in range(200):
-
+for i in range(NoDatos):
 
    data, addr = serverSock.recvfrom(1024)
    Data = data.decode("utf-8").split(",")
@@ -141,10 +120,10 @@ serverSock.close()
 #-----------------------Graficando------------------------
 Tiempo = np.arange(len(Acelerometro.getdX()))
 fig, ax = plt.subplots(1, figsize=(8, 6))
-ax.set_ylim([0,20])
-ax.plot(Tiempo, Acelerometro.getdX(), color="red", label="x")
-ax.plot(Tiempo, Acelerometro.getdY(), color="blue", label="y")
-ax.plot(Tiempo, Acelerometro.getdZ(), color="green", label="z")
+ax.set_ylim([-10,10])
+#ax.plot(Tiempo, Acelerometro.getdX(),'bo', color="red", label="x")
+#ax.plot(Tiempo, Acelerometro.getdY(),'bo', color="blue", label="y")
+ax.plot(Tiempo, Acelerometro.getdA(), 'bo', color="green", label="z")
 #ax.plot(Tiempo, Acelerometro.getAngulo(), 'bo', color="black", label="A")
 #ax.plot(Tiempo, Giroscopio,'bo', color="blue", label="y")
 #ax.plot(Tiempo, Magnetico,'bo', color="yellow", label="z")
