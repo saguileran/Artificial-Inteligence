@@ -33,7 +33,7 @@ class Sensor:
       self.dZ.append(self.Z[-1]-self.Z[-2])
       self.dA.append(self.A[-1]-self.A[-2])
       self.dAngulo.append(self.Angulo[-1]-self.Angulo[-2])
-=======
+
     self.X=[]; self.Y=[]; self.Z=[]; self.A=[]; self.Angulo=[]; self.difX=[]; self.difY=[]; self.difZ=[]; self.difAngulo=[];
 
   def getX(self): return(self.X)
@@ -58,7 +58,7 @@ class Sensor:
         return [sum(self.difX[len(self.difX)-n-1:len(self.difX)-1]), sum(self.difY[len(self.difY)-n-1:len(self.difY)-1]), sum(self.difZ[len(self.difZ)-n-1:len(self.difZ)-1]), sum(self.difAngulo[len(self.difAngulo)-n-1:len(self.difAngulo)-1])]        
     else:
         return [sum(self.difX), sum(self.difY), sum(self.difZ), sum(self.difAngulo)]
->>>>>>> 9fea3d6badd9cb4547ca765611b109caf4e96c08
+
 
 ###Se puede modificar la parte  de append para que las listas tengan una longitud constante###
 #-----------Creando email-----------
@@ -94,12 +94,11 @@ def Email(body):
 #  if label==3: return (instanciaSensor.Angulo[-1]-instanciaSensor.Angulo[-2])
 
 #-------------Creando conexion-------------------
-<<<<<<< HEAD
+
 UDP_IP_ADDRESS = "192.168.1.14";    UDP_PORT_NO = 5555
-=======
+
 UDP_IP_ADDRESS = "192.168.1.59"
 UDP_PORT_NO = 5555
->>>>>>> 9fea3d6badd9cb4547ca765611b109caf4e96c08
 
 serverSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 serverSock.bind((UDP_IP_ADDRESS, UDP_PORT_NO))
@@ -107,20 +106,15 @@ serverSock.bind((UDP_IP_ADDRESS, UDP_PORT_NO))
 #--------------Tomando Datos---------------------------
 #dt=0.01 #Distancia entre datos
 tolang, toldif = 5, 5
-<<<<<<< HEAD
 NoDatos = 10**4
-=======
-
->>>>>>> 9fea3d6badd9cb4547ca765611b109caf4e96c08
 flag= False
 
 GPS = Sensor();   Acelerometro = Sensor();   Giroscopio = Sensor();
 
-<<<<<<< HEAD
 for i in range(NoDatos):
-=======
+
 for i in range(200):
->>>>>>> 9fea3d6badd9cb4547ca765611b109caf4e96c08
+
 
    data, addr = serverSock.recvfrom(1024)
    Data = data.decode("utf-8").split(",")
@@ -132,7 +126,7 @@ for i in range(200):
    else: k=0
    if Data[1+4*k]==' 3':   Acelerometro.Actualizando(Data[2+4*k], Data[3+4*k], Data[4+4*k])
    if len(Data)>5 and Data[5+4*k]==4:    Grioscopio.Actualizando(Data[6+4*k], Data[7+4*k], Data[8+4*k])
-<<<<<<< HEAD
+
 #   Dif = list(Diferencias(Acelerometro))
 #   print(Acelerometro.getdX())
  #  print("")
@@ -140,13 +134,13 @@ for i in range(200):
 #     print("se cayo", Data[0]);
   #   Email("Se ha caido su abuelita en x = {}, y = {}, z = {} el dia {} a las {} horas".format(GPS[0], GPS[1], GPS[2], str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]  ))
   #   flat = True #Para no enviar mas correos
-=======
+
    print(Acelerometro.AcumuladorDeDiferencias(20))
    if Acelerometro.AcumuladorDeDiferencias(20)[2] > toldif and abs(Acelerometro.AcumuladorDeDiferencias(10)[3]) > tolang  and flag == False: 
      print("Atencion, ha ocurrido una caida!")
      Email("Se ha caido su abuelita en la posicion x = {}, y = {}, z = {} el dia {} a las {} horas".format(GPS.getX()[-1], GPS.getY()[-1], GPS.getZ()[-1], str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]  ))
      flag = True #Para no enviar mas correos
->>>>>>> 9fea3d6badd9cb4547ca765611b109caf4e96c08
+
 
 #print("Datos:", Acelerometro.getAngulo()) #, GPS.getY(), GPS.getZ())
 #print(" ")
