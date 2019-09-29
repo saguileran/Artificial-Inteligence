@@ -93,7 +93,7 @@ serverSock.bind((UDP_IP_ADDRESS, UDP_PORT_NO))
 #--------------Tomando Datos---------------------------
 flag, caida= False, False
 GPS = Sensor(); Acelerometro = Sensor(); Giroscopio = Sensor()
-Gravedad = Sensor() #83
+Gravedad = Sensor();#83
 Aceleracion_lineal= Sensor() #82
 t, i = 0, 0
 tolacel, tolgrav, tolang = 3, 9, 4
@@ -130,13 +130,15 @@ with raw(sys.stdin):
                             caida = True
                             #print("Caida! Coseno: "+ str(coseno)+ " norma: "+ str(np.linalg.norm(acclin)))
                 #----Segundo Detector------
+                print(Acelerometro.getA()[-1])
                 if abs(Acelerometro.getdA()[-1]) > tolacel:
                     caida1 = True
                 #----Tercer Detector------
                 if abs(Acelerometro.getdAngulo()[-1]) > tolang:
                     caida2 = True
                 #--------Confirmacion de caida------------
-                if caida and (not flag) and caida1 and caida2:
+               # if caida and (not flag) and caida1 and caida2:
+                if caida1 and (not flag):
                     print("Atention, a fall has occured!")
                     #Email("Your grandparent has fallen at latitude {}, longitude {} and height  = {} the day {} at {} time. To locate this position go to https://www.gps-coordinates.net and enter the latitude and longitude.".format(GPS.getX()[-1], GPS.getY()[-1], GPS.getZ()[-1], str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]))
                     flag = True #Para no enviar mas correos
