@@ -24,12 +24,12 @@ class nonblocking(object):
         fcntl.fcntl(self.fd, fcntl.F_SETFL, self.orig_fl)
 
 print("Presione la tecla x para salir.")
-
+cellphones
 #------------Clase-----------
 class Sensor:
     def __init__(self):
-        self.X=list(np.zeros(10)); self.Y=list(np.zeros(10)); self.Z=list(np.zeros(10)); self.A=list(np.zeros(10)); self.Angulo=list(np.zeros(10));
-        self.dX=list(np.zeros(10)); self.dY=list(np.zeros(10)); self.dZ=list(np.zeros(10)); self.dA=list(np.zeros(10)); self.dAngulo=list(np.zeros(10))
+        N=int(10**3); self.X=list(np.zeros(N)); self.Y=list(np.zeros(N)); self.Z=list(np.zeros(N)); self.A=list(np.zeros(N)); self.Angulo=list(np.zeros(N));
+        self.dX=list(np.zeros(N)); self.dY=list(np.zeros(N)); self.dZ=list(np.zeros(N)); self.dA=list(np.zeros(N)); self.dAngulo=list(np.zeros(N))
 
     def getX(self): return(self.X)
     def getY(self): return(self.Y)
@@ -80,8 +80,8 @@ Subject: %s
     print ('Email sent!')
 
 #-------------Creando conexion-------------------
-UDP_IP_ADDRESS = "192.168.1.14"
-UDP_PORT_NO = 5551
+UDP_IP_ADDRESS = "192.168.1.13"
+UDP_PORT_NO = 5555
 
 serverSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 #serverSock.close()
@@ -92,7 +92,7 @@ flag, caida= False, False
 GPS = Sensor(); Acelerometro = Sensor(); Girsocopio = Sensor()
 Gravedad = Sensor() #83
 Aceleracion_lineal= Sensor() #82
-t=0
+t, i = 0, 0
 tolacel, tolgrav, tolang = 3, 9, 4
 
 with raw(sys.stdin):
@@ -116,10 +116,10 @@ with raw(sys.stdin):
                 if Data.count(' 83')>0 and Data.count(' 82')>0:
                     grav = np.array([float(Data[Data.index(' 83')+1]),float(Data[Data.index(' 83')+2]),float(Data[Data.index(' 83')+3])])
                     acclin = np.array([float(Data[Data.index(' 82')+1]),float(Data[Data.index(' 82')+2]),float(Data[Data.index(' 82')+3])])
-                    
+
                     #plt.scatter(t,float(np.linalg.norm(acclin)))
                     #plt.pause(0.001);                    t+=1
-                                
+
                     if np.linalg.norm(acclin) > tolgrav: #Prueba con gravity y vector aceleracion
                         coseno = np.dot(grav,acclin)/(np.linalg.norm(grav)*np.linalg.norm(acclin))
                         if coseno < -0.90:
@@ -142,5 +142,21 @@ with raw(sys.stdin):
             except IOError:
                 print('Not ready')
 
+#------------------Creating txt----------------
+file = open(str(datetime.datetime.now().time()), 'w')
+file.write(" {} W {} W {} ".format(Acelerometro.getX(), Acelerometro.getY(), Acelerometro.getZ()))
+#file.write(" {} W {} W {} ".format(Giroscopio.getX(), Giroscopio.getY() ,Giroscopio.getZ()))
+#file.write(" {} W {} W {} ".format(Gravedad.getX(), Gravedad.getY(), Gravedad.getZ()))
+#file.write(" {} W {} W {} ".format(Aceleracion_lineal.getX(), Aceleracion_lineal.getY(), Aceleracion_lineal.getZ()))
+           
+file.close()
+#-----------------Uploading to git----------------
+#os.system("sudo su")
+#os.system("31415") #depende de cada usuario
+os.syste("sudo git add .")
+os.syste("sudo git commit -m "+str(datetime.datetime.now().time()))
+os.syste("sudo git push origin master")
+os.syste("saguileran") #usuario
+os.syste("") #contraseña
 
 plt.show()
