@@ -106,10 +106,9 @@ with raw(sys.stdin):
                 data, addr = serverSock.recvfrom(1024)
                 Data = data.decode("utf-8").split(",")
 
-                if Data.count(' 1')>0:  GPS.Actualizando(Data[Data.index(' 1')+1], Data[Data.index(' 1')+2], Data[Data.index(' 1')+3]);  k=1
-                else: k=0
-                if Data[1+4*k]==' 3':   Acelerometro.Actualizando(Data[2+4*k], Data[3+4*k], Data[4+4*k])
-                if len(Data)>5 and Data[5+4*k]==4:    Giroscopio.Actualizando(Data[6+4*k], Data[7+4*k], Data[8+4*k])
+                if Data.count(' 1')>0:  GPS.Actualizando(float(Data[Data.index(' 1')+1]), float(Data[Data.index(' 1')+2]), float(Data[Data.index(' 1')+3]))
+                if Data.count(' 3')>0:  Acelerometro.Actualizando(float(Data[Data.index(' 3')+1]), float(Data[Data.index(' 3')+2]), float(Data[Data.index(' 3')+3]))
+                if Data.count(' 4')>0:  Giroscopio.Actualizando(float(Data[Data.index(' 4')+1]), float(Data[Data.index(' 4')+2]), float(Data[Data.index(' 4')+3] ))
 
                 #print(Acelerometro.getdAngulo()[-1])
                 #plt.scatter(t,float(Acelerometro.getdA()[-1]))
@@ -117,8 +116,10 @@ with raw(sys.stdin):
 
                 #--- Pruebas con el acelerometro lineal y la gravedad
                 if Data.count(' 83')>0 and Data.count(' 82')>0:
-                    grav = np.array([float(Data[Data.index(' 83')+1]),float(Data[Data.index(' 83')+2]),float(Data[Data.index(' 83')+3])])
-                    acclin = np.array([float(Data[Data.index(' 82')+1]),float(Data[Data.index(' 82')+2]),float(Data[Data.index(' 82')+3])])
+                    grav = np.array(float(Data[Data.index(' 83')+1]),float(Data[Data.index(' 83')+2]),float(Data[Data.index(' 83')+3]))
+                    acclin = np.array(float(Data[Data.index(' 82')+1]),float(Data[Data.index(' 82')+2]),float(Data[Data.index(' 82')+3]))
+                    Gravedad.Actualizando(float(Data[Data.index(' 83')+1]),float(Data[Data.index(' 83')+2]),float(Data[Data.index(' 83')+3]))
+                    Aceleracion_lineal.Actualizando(float(Data[Data.index(' 82')+1]),float(Data[Data.index(' 82')+2]),float(Data[Data.index(' 82')+3]))
 
                     #plt.scatter(t,float(np.linalg.norm(acclin)))
                     #plt.pause(0.001);                    t+=1
@@ -128,6 +129,7 @@ with raw(sys.stdin):
                         if coseno < -0.90:
                             caida = True
                             #print("Caida! Coseno: "+ str(coseno)+ " norma: "+ str(np.linalg.norm(acclin)))
+                #Acelerometro.Actualizando()
                 #----Segundo Detector------
                 if abs(Acelerometro.getdA()[-1]) > tolacel:
                     caida1 = True
