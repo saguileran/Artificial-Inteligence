@@ -51,7 +51,7 @@ class Sensor:
 
         self.X.append(float(x)); self.Y.append(float(y)); self.Z.append(float(z))
         self.A.append((float(x)**2+float(y)**2+float(z)**2)**0.5)
-        self.Angulo.append(np.arccos(z/(y**2 + z**2+x**2)**0.5) * 180/np.pi) #Angulo theta de esfericas en grados
+        if y**2 + z**2+x**2!=0:  self.Angulo.append(np.arccos(z/(y**2 + z**2+x**2)**0.5) * 180/np.pi) #Angulo theta de esfericas en grados
 
         self.dX.append(self.X[-1]-self.X[-2]);  self.dY.append(self.Y[-1]-self.Y[-2])
         self.dZ.append(self.Z[-1]-self.Z[-2]);  self.dA.append(self.A[-1]-self.A[-2])
@@ -116,8 +116,8 @@ with raw(sys.stdin):
 
                 #--- Pruebas con el acelerometro lineal y la gravedad
                 if Data.count(' 83')>0 and Data.count(' 82')>0:
-                    grav = np.array(float(Data[Data.index(' 83')+1]),float(Data[Data.index(' 83')+2]),float(Data[Data.index(' 83')+3]))
-                    acclin = np.array(float(Data[Data.index(' 82')+1]),float(Data[Data.index(' 82')+2]),float(Data[Data.index(' 82')+3]))
+                    grav = np.array([float(Data[Data.index(' 83')+1]),float(Data[Data.index(' 83')+2]),float(Data[Data.index(' 83')+3])])
+                    acclin = np.array([float(Data[Data.index(' 82')+1]),float(Data[Data.index(' 82')+2]),float(Data[Data.index(' 82')+3])])
                     Gravedad.Actualizando(float(Data[Data.index(' 83')+1]),float(Data[Data.index(' 83')+2]),float(Data[Data.index(' 83')+3]))
                     Aceleracion_lineal.Actualizando(float(Data[Data.index(' 82')+1]),float(Data[Data.index(' 82')+2]),float(Data[Data.index(' 82')+3]))
 
@@ -129,7 +129,6 @@ with raw(sys.stdin):
                         if coseno < -0.90:
                             caida = True
                             #print("Caida! Coseno: "+ str(coseno)+ " norma: "+ str(np.linalg.norm(acclin)))
-                #Acelerometro.Actualizando()
                 #----Segundo Detector------
                 if abs(Acelerometro.getdA()[-1]) > tolacel:
                     caida1 = True
