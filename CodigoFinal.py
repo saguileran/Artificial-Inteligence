@@ -96,7 +96,7 @@ GPS = Sensor(); Acelerometro = Sensor(); Giroscopio = Sensor()
 Gravedad = Sensor();#83
 Aceleracion_lineal= Sensor() #82
 t, i = 0, 0
-tolacel, tolgrav, tolang = 10, 9, 4
+tolacel, tolgrav, tolang = 3, 9, 4
 
 with raw(sys.stdin):
     with nonblocking(sys.stdin):
@@ -130,7 +130,7 @@ with raw(sys.stdin):
                             caida = True
                             #print("Caida! Coseno: "+ str(coseno)+ " norma: "+ str(np.linalg.norm(acclin)))
                 #----Segundo Detector------
-                print(Acelerometro.getZ()[-1])
+                print(Acelerometro.getdZ()[-1])
                 if abs(Acelerometro.getdZ()[-1]) > tolacel:
                     caida1 = True
                 #----Tercer Detector------
