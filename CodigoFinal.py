@@ -155,7 +155,7 @@ file.close()
 os.system("sudo git add .")
 os.system("sudo git commit -m "+str(datetime.datetime.now().time()))
 os.system("sudo git push origin master")
-input("saguileran") #usuario
-input("961217.sS") #contraseña
+os.input("saguileran") #usuario
+os.input("961217.sS") #contraseña
 
 plt.show()
