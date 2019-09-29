@@ -1,6 +1,8 @@
 import socket, os, datetime, smtplib, fcntl, sys, os, time, tty, termios
 import matplotlib.pyplot as plt
 import numpy as np
+from subprocess import Popen, PIPE
+
 
 #------ Capturar entrada teclado------------------
 class raw(object):
@@ -154,8 +156,9 @@ file.close()
 
 os.system("sudo git add .")
 os.system("sudo git commit -m "+str(datetime.datetime.now().time()))
-os.system("sudo git push origin master")
-os.system("saguileran")  #usuario
-os.system("961217.sS") #contraseña
+os.system("sudo git push origin master; saguileran; 961217.sS")
+#os.system("saguileran")  #usuario
+
+
 
 plt.show()
