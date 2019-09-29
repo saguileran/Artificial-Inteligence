@@ -24,7 +24,7 @@ class nonblocking(object):
         fcntl.fcntl(self.fd, fcntl.F_SETFL, self.orig_fl)
 
 print("Presione la tecla x para salir.")
-cellphones
+
 #------------Clase-----------
 class Sensor:
     def __init__(self):
@@ -80,13 +80,9 @@ Subject: %s
     print ('Email sent!')
 
 #-------------Creando conexion-------------------
-<<<<<<< HEAD
+
 UDP_IP_ADDRESS = "192.168.1.13"
 UDP_PORT_NO = 5555
-=======
-UDP_IP_ADDRESS = "10.203.146.49"
-UDP_PORT_NO = 5551
->>>>>>> 174e56335c9751405dfabdeb97750c59e9bccbea
 
 serverSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 #serverSock.close()
@@ -157,10 +153,10 @@ file.write(" {} W {} W {} ".format(Acelerometro.getX(), Acelerometro.getY(), Ace
 file.close()
 #-----------------Uploading to git----------------
 
-os.syste("sudo git add .")
-os.syste("sudo git commit -m "+str(datetime.datetime.now().time()))
-os.syste("sudo git push origin master")
-os.syste("saguileran") #usuario
-os.syste("") #contraseña
+os.system("sudo git add .")
+os.system("sudo git commit -m "+str(datetime.datetime.now().time()))
+os.system("sudo git push origin master")
+os.system("saguileran") #usuario
+os.system("961217.sS") #contraseña
 
 plt.show()
