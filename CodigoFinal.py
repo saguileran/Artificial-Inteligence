@@ -149,7 +149,7 @@ with raw(sys.stdin):
                 print('Not ready')
 
 #------------------Creating txt----------------
-file = open(str(datetime.datetime.now().time()), 'w')
+file = open(str(datetime.datetime.now().time())+".txt", 'w')
 file.write(" {} W {} W {} \n".format(Acelerometro.getX(), Acelerometro.getY(), Acelerometro.getZ()))
 file.write(" {} W {} W {} \n".format(Giroscopio.getX(), Giroscopio.getY() ,Giroscopio.getZ()))
 file.write(" {} W {} W {} \n".format(Gravedad.getX(), Gravedad.getY(), Gravedad.getZ()))
