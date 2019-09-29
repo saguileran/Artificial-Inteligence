@@ -151,11 +151,12 @@ file.write(" {} W {} W {} ".format(Acelerometro.getX(), Acelerometro.getY(), Ace
            
 file.close()
 #-----------------Uploading to git----------------
-
+#os.system("sudo su")
+#os.system("31415") #depende de cada usuario
 os.syste("sudo git add .")
 os.syste("sudo git commit -m "+str(datetime.datetime.now().time()))
 os.syste("sudo git push origin master")
 os.syste("saguileran") #usuario
-os.syste("961217.sS") #contraseña
+os.syste("") #contraseña
 
 plt.show()
