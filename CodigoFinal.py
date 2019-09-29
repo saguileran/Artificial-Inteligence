@@ -148,8 +148,7 @@ file = open(str(datetime.datetime.now().time()), 'w')
 file.write(" {} W {} W {} ".format(Acelerometro.getX(), Acelerometro.getY(), Acelerometro.getZ()))
 #file.write(" {} W {} W {} ".format(Giroscopio.getX(), Giroscopio.getY() ,Giroscopio.getZ()))
 #file.write(" {} W {} W {} ".format(Gravedad.getX(), Gravedad.getY(), Gravedad.getZ()))
-#file.write(" {} W {} W {} ".format(Aceleracion_lineal.getX(), Aceleracion_lineal.getY(), Aceleracion_lineal.getZ()))
-           
+#file.write(" {} W {} W {} ".format(Aceleracion_lineal.getX(), Aceleracion_lineal.getY(), Aceleracion_lineal.getZ()))  
 file.close()
 #-----------------Uploading to git----------------
 
