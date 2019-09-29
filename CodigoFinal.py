@@ -111,8 +111,8 @@ with raw(sys.stdin):
                 if Data.count(' 4')>0:  Giroscopio.Actualizando(float(Data[Data.index(' 4')+1]), float(Data[Data.index(' 4')+2]), float(Data[Data.index(' 4')+3] ))
 
                 #print(Acelerometro.getdAngulo()[-1])
-                plt.scatter(t,float(Acelerometro.getdZ()[-1]))
-                plt.pause(0.001); t+=1
+                #plt.scatter(t,float(Acelerometro.getdZ()[-1]))
+                #plt.pause(0.001); t+=1
 
                 #--- Pruebas con el acelerometro lineal y la gravedad
                 if Data.count(' 83')>0 and Data.count(' 82')>0:
@@ -131,7 +131,7 @@ with raw(sys.stdin):
                             #print("Caida! Coseno: "+ str(coseno)+ " norma: "+ str(np.linalg.norm(acclin)))
                 #----Segundo Detector------
                 print(Acelerometro.getdZ()[-1])
-                if abs(Acelerometro.getdZ()[-1]) > tolacel:
+                if Acelerometro.getdZ().count(0)<999 and abs(Acelerometro.getdZ()[-1]) > tolacel:
                     caida1 = True
                 #----Tercer Detector------
                 if abs(Acelerometro.getdAngulo()[-1]) > tolang:
