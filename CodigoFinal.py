@@ -91,7 +91,7 @@ serverSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 serverSock.bind((UDP_IP_ADDRESS, UDP_PORT_NO))
 
 #--------------Tomando Datos---------------------------
-flag, caida= False, False
+flag, caida, caida1, caida2= False, False, False, False
 GPS = Sensor(); Acelerometro = Sensor(); Giroscopio = Sensor()
 Gravedad = Sensor();#83
 Aceleracion_lineal= Sensor() #82
@@ -130,8 +130,8 @@ with raw(sys.stdin):
                             caida = True
                             #print("Caida! Coseno: "+ str(coseno)+ " norma: "+ str(np.linalg.norm(acclin)))
                 #----Segundo Detector------
-                print(Acelerometro.getA()[-1])
-                if abs(Acelerometro.getdA()[-1]) > tolacel:
+                print(Acelerometro.getZ()[-1])
+                if abs(Acelerometro.getdZ()[-1]) > tolacel:
                     caida1 = True
                 #----Tercer Detector------
                 if abs(Acelerometro.getdAngulo()[-1]) > tolang:
