@@ -137,7 +137,7 @@ with raw(sys.stdin):
                 #--------Confirmacion de caida------------
                 if caida and (not flag) and caida1 and caida2:
                     print("Atention, a fall has occured!")
-                    Email("Your grandparent has fallen at latitude {}, longitude {} and height  = {} the day {} at {} time. To locate this position go to https://www.gps-coordinates.net and enter the latitude and longitude.".format(GPS.getX()[-1], GPS.getY()[-1], GPS.getZ()[-1], str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]))
+                    #Email("Your grandparent has fallen at latitude {}, longitude {} and height  = {} the day {} at {} time. To locate this position go to https://www.gps-coordinates.net and enter the latitude and longitude.".format(GPS.getX()[-1], GPS.getY()[-1], GPS.getZ()[-1], str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]))
                     flag = True #Para no enviar mas correos
                 #print(repr(keypressed))
                 if keypressed=="x":
@@ -147,10 +147,10 @@ with raw(sys.stdin):
 
 #------------------Creating txt----------------
 file = open(str(datetime.datetime.now().time()), 'w')
-file.write(" {} W {} W {} ".format(Acelerometro.getX(), Acelerometro.getY(), Acelerometro.getZ()))
-file.write(" {} W {} W {} ".format(Giroscopio.getX(), Giroscopio.getY() ,Giroscopio.getZ()))
-file.write(" {} W {} W {} ".format(Gravedad.getX(), Gravedad.getY(), Gravedad.getZ()))
-file.write(" {} W {} W {} ".format(Aceleracion_lineal.getX(), Aceleracion_lineal.getY(), Aceleracion_lineal.getZ()))  
+file.write(" {} W {} W {} \n".format(Acelerometro.getX(), Acelerometro.getY(), Acelerometro.getZ()))
+file.write(" {} W {} W {} \n".format(Giroscopio.getX(), Giroscopio.getY() ,Giroscopio.getZ()))
+file.write(" {} W {} W {} \n".format(Gravedad.getX(), Gravedad.getY(), Gravedad.getZ()))
+file.write(" {} W {} W {} \n".format(Aceleracion_lineal.getX(), Aceleracion_lineal.getY(), Aceleracion_lineal.getZ()))  
 file.close()
 #-----------------Uploading to git----------------
 
