@@ -127,7 +127,7 @@ with raw(sys.stdin):
                 if Data.count(' 4')>0:  Giroscopio.Actualizando(float(Data[Data.index(' 4')+1]), float(Data[Data.index(' 4')+2]), float(Data[Data.index(' 4')+3] ))
 
                 if not flag:
-                    Gravedad.Imagen(t, False); t+=1
+                    Aceleracion_lineal.Imagen(t, False); t+=1
                 #-------------Primer Detector-----------
                 #--- Pruebas con el acelerometro lineal y la gravedad
                 if Data.count(' 83')>0 and Data.count(' 82')>0:
