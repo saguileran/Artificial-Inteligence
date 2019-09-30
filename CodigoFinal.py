@@ -1,4 +1,4 @@
-import socket, os, datetime, smtplib, fcntl, sys, os, time, tty, termios
+import socket, os, datetime, smtplib, fcntl, sys, os, time, tty, termios, subprocess
 import matplotlib.pyplot as plt
 import numpy as np
 from subprocess import Popen, PIPE
@@ -57,6 +57,15 @@ class Sensor:
         self.dZ.append(self.Z[-1]-self.Z[-2]);  self.dA.append(self.A[-1]-self.A[-2])
         self.dAngulo.append(self.Angulo[-1]-self.Angulo[-2])
 
+    def Imagen(self, t):
+        plt.ylim([-100,100]); plt.xlabel("t"); plt.ylabel("Value")
+        if t==1: plt.legend(loc='upper left');
+        plt.scatter(t,float(self.getdX()[-1]), c='b', label='dX')
+        plt.scatter(t,float(self.getdY()[-1]), c='g', label='dY')
+        plt.scatter(t,float(self.getdZ()[-1]), c='y', label='dZ')
+        plt.scatter(t,float(self.getdA()[-1]), c='r', label='dA')
+        plt.pause(0.001);
+
 #-----------Creando email-----------
 def Email(sent_body):
     gmail_user = 'iaun2019pe@gmail.com'
@@ -97,7 +106,7 @@ Gravedad = Sensor();#83
 Aceleracion_lineal= Sensor() #82
 t, i = 0, 0
 tolacel, tolgrav, tolang = 25, 9, 4
-plt.ylim([-100,100])
+plt.ylim([-100,100]); plt.xlabel("t"); plt.ylabel("Value")
 
 with raw(sys.stdin):
     with nonblocking(sys.stdin):
@@ -111,14 +120,16 @@ with raw(sys.stdin):
                 if Data.count(' 3')>0:  Acelerometro.Actualizando(float(Data[Data.index(' 3')+1]), float(Data[Data.index(' 3')+2]), float(Data[Data.index(' 3')+3]))
                 if Data.count(' 4')>0:  Giroscopio.Actualizando(float(Data[Data.index(' 4')+1]), float(Data[Data.index(' 4')+2]), float(Data[Data.index(' 4')+3] ))
 
+                Acelerometro.Imagen(t); t+=1
+                '''
                 #print(Acelerometro.getdAngulo()[-1])
-                if t==0: plt.legend(loc='upper left');
+                if t==1: plt.legend(loc='upper left');
                 plt.scatter(t,float(Acelerometro.getdX()[-1]), c='b', label='dX')
                 plt.scatter(t,float(Acelerometro.getdY()[-1]), c='g', label='dY')
                 plt.scatter(t,float(Acelerometro.getdZ()[-1]), c='y', label='dZ')
                 plt.scatter(t,float(Acelerometro.getdA()[-1]), c='r', label='dA')
                 plt.pause(0.001); t+=1
-
+'''
                 #--- Pruebas con el acelerometro lineal y la gravedad
                 if Data.count(' 83')>0 and Data.count(' 82')>0:
                     grav = np.array([float(Data[Data.index(' 83')+1]),float(Data[Data.index(' 83')+2]),float(Data[Data.index(' 83')+3])])
@@ -168,8 +179,8 @@ file.close()
 os.system("sudo git add --all")
 os.system("sudo git commit -m "+str(datetime.datetime.now().date())+" - "+str(datetime.datetime.now().time())[:8])
 os.system("sudo git push origin master")
-#os.system("saguileran")  #usuario
-plt.show()
+
+#plt.show()
 plt.savefig(location+"Pictures/"+str(datetime.datetime.now().date())+" - "+str(datetime.datetime.now().time())[:8]+".png")
-plt.pause(0.1)
+#plt.pause(0.1)
 plt.close()
