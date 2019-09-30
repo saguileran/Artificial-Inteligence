@@ -58,13 +58,18 @@ class Sensor:
         self.dZ.append(self.Z[-1]-self.Z[-2]);  self.dA.append(self.A[-1]-self.A[-2])
         self.dAngulo.append(self.Angulo[-1]-self.Angulo[-2])
 
-    def Imagen(self, t):
-        plt.ylim([-100,100]); plt.xlabel("t"); plt.ylabel(self.getName())
+    def Imagen(self, t, angulo = False):
         if t==1: plt.legend(loc='upper left');
-        plt.scatter(t,float(self.getdX()[-1]), c='b', label='dX')
-        plt.scatter(t,float(self.getdY()[-1]), c='g', label='dY')
-        plt.scatter(t,float(self.getdZ()[-1]), c='y', label='dZ')
-        plt.scatter(t,float(self.getdA()[-1]), c='r', label='dA')
+
+        if angulo==True:
+            plt.ylim([0,np.pi]); plt.xlabel("t"); plt.ylabel(self.getName())
+            plt.scatter(t,float(self.getAngulo()[-1]), label= "dAngulo")
+        else:
+            plt.ylim([-100,100]); plt.xlabel("t"); plt.ylabel(self.getName())
+            plt.scatter(t,float(self.getdX()[-1]), c='b', label='dX')
+            plt.scatter(t,float(self.getdY()[-1]), c='g', label='dY')
+            plt.scatter(t,float(self.getdZ()[-1]), c='y', label='dZ')
+            plt.scatter(t,float(self.getdA()[-1]), c='r', label='dA')
         plt.pause(0.001);
 
 #-----------Creando email-----------
@@ -106,7 +111,7 @@ GPS = Sensor(); Acelerometro = Sensor(); Giroscopio = Sensor()
 Gravedad = Sensor();#83
 Aceleracion_lineal= Sensor() #82
 t, i = 0, 0
-tolacel, tolgrav, tolang = 25, 9, 4
+tolacel, tolgrav, tolang = 25, 10, 4
 plt.ylim([-100,100]); plt.xlabel("t"); plt.ylabel("Value")
 
 with raw(sys.stdin):
@@ -121,7 +126,7 @@ with raw(sys.stdin):
                 if Data.count(' 3')>0:  Acelerometro.Actualizando(float(Data[Data.index(' 3')+1]), float(Data[Data.index(' 3')+2]), float(Data[Data.index(' 3')+3]))
                 if Data.count(' 4')>0:  Giroscopio.Actualizando(float(Data[Data.index(' 4')+1]), float(Data[Data.index(' 4')+2]), float(Data[Data.index(' 4')+3] ))
 
-                Acelerometro.Imagen(t); t+=1
+                #Acelerometro.Imagen(t, True); t+=1
                 '''
                 #print(Acelerometro.getdAngulo()[-1])
                 if t==1: plt.legend(loc='upper left');
@@ -149,12 +154,12 @@ with raw(sys.stdin):
                 #----Segundo Detector------
                 #print(Acelerometro.getdA()[-1])
                 if Acelerometro.getdA().count(0)<999 and abs(Acelerometro.getdA()[-1]) > tolacel:
-                    caida1 = True
+                    caida1 = True; 
                 #----Tercer Detector------
                 if abs(Acelerometro.getdAngulo()[-1]) > tolang:
                     caida2 = True
                 #--------Confirmacion de caida------------
-                if caida and (not flag) and caida1 and caida2:
+                if (caida or caida1) and (not flag):
                     print("Atention, a fall has occured!")
                     #Email("Your grandparent has fallen at latitude {}, longitude {} and height  = {} the day {} at {} time. To locate this position go to https://www.gps-coordinates.net and enter the latitude and longitude.".format(GPS.getX()[-1], GPS.getY()[-1], GPS.getZ()[-1], str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]))
                     flag = True #Para no enviar mas correos
