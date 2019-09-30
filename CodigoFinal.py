@@ -131,7 +131,7 @@ with raw(sys.stdin):
                 plt.scatter(t,float(Acelerometro.getdY()[-1]), c='g', label='dY')
                 plt.scatter(t,float(Acelerometro.getdZ()[-1]), c='y', label='dZ')
                 plt.scatter(t,float(Acelerometro.getdA()[-1]), c='r', label='dA')
-                plt.pause(0.001);
+                plt.pause(0.001); t+=1
 
         
             
