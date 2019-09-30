@@ -96,9 +96,9 @@ GPS = Sensor(); Acelerometro = Sensor(); Giroscopio = Sensor()
 Gravedad = Sensor();#83
 Aceleracion_lineal= Sensor() #82
 t, i = 0, 0
-tolacel, tolgrav, tolang = 30, 9, 4
-plt.legend(loc='upper left');
-plt.ylim([-50,50])
+tolacel, tolgrav, tolang = 25, 9, 4
+plt.ylim([-100,100])
+
 with raw(sys.stdin):
     with nonblocking(sys.stdin):
         while True:
@@ -112,6 +112,7 @@ with raw(sys.stdin):
                 if Data.count(' 4')>0:  Giroscopio.Actualizando(float(Data[Data.index(' 4')+1]), float(Data[Data.index(' 4')+2]), float(Data[Data.index(' 4')+3] ))
 
                 #print(Acelerometro.getdAngulo()[-1])
+                if t==0: plt.legend(loc='upper left');
                 plt.scatter(t,float(Acelerometro.getdX()[-1]), c='b', label='dX')
                 plt.scatter(t,float(Acelerometro.getdY()[-1]), c='g', label='dY')
                 plt.scatter(t,float(Acelerometro.getdZ()[-1]), c='y', label='dZ')
@@ -152,21 +153,23 @@ with raw(sys.stdin):
             except IOError:
                 print('Not ready')
 
+location ='/home/sebas/Documents/InteligenciaArtificial/Artificial-Inteligence/'
 #------------------Creating txt----------------
-file = open(str(datetime.datetime.now().date())+" - "+str(datetime.datetime.now().time())[:8]+".txt", 'w')
+file = open(location+"Data/"+str(datetime.datetime.now().date())+" - "+str(datetime.datetime.now().time())[:8]+".txt", 'w')
 file.write(" {} W {} W {} \n".format(Acelerometro.getX(), Acelerometro.getY(), Acelerometro.getZ()))
 file.write(" {} W {} W {} \n".format(Giroscopio.getX(), Giroscopio.getY() ,Giroscopio.getZ()))
 file.write(" {} W {} W {} \n".format(Gravedad.getX(), Gravedad.getY(), Gravedad.getZ()))
 file.write(" {} W {} W {} \n".format(Aceleracion_lineal.getX(), Aceleracion_lineal.getY(), Aceleracion_lineal.getZ()))
-comment = input("Insert comment")
+comment = input("Insert comment: ")
 file.write(comment)
 file.close()
 #-----------------Uploading to git----------------
 
-os.system("sudo git add .")
+os.system("sudo git add --all")
 os.system("sudo git commit -m "+str(datetime.datetime.now().time()))
 os.system("sudo git push origin master")
 #os.system("saguileran")  #usuario
-
-
 plt.show()
+plt.savefig(location+"Pictures/"+str(datetime.datetime.now().date())+" - "+str(datetime.datetime.now().time())[:8]+".png")
+plt.pause(1)
+plt.clse()
