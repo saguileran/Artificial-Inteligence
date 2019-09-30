@@ -112,7 +112,7 @@ Gravedad = Sensor();#83
 Aceleracion_lineal= Sensor() #82
 t, i = 0, 0
 tolacel, tolgrav, tolang = 25, 10, 4
-plt.ylim([-100,100]); plt.xlabel("t"); plt.ylabel("Value")
+plt.ylim([-50,50]); plt.xlabel("t"); plt.ylabel("Value")
 
 with raw(sys.stdin):
     with nonblocking(sys.stdin):
