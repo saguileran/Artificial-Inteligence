@@ -127,7 +127,7 @@ with raw(sys.stdin):
                 if Data.count(' 4')>0:  Giroscopio.Actualizando(float(Data[Data.index(' 4')+1]), float(Data[Data.index(' 4')+2]), float(Data[Data.index(' 4')+3] ))
 
                 Acelerometro.Imagen(t, False); t+=1
-   
+                #-------------Primer Detector-----------
                 #--- Pruebas con el acelerometro lineal y la gravedad
                 if Data.count(' 83')>0 and Data.count(' 82')>0:
                     grav = np.array([float(Data[Data.index(' 83')+1]),float(Data[Data.index(' 83')+2]),float(Data[Data.index(' 83')+3])])
@@ -137,19 +137,15 @@ with raw(sys.stdin):
 
                     #plt.scatter(t,float(np.linalg.norm(acclin)))
                     #plt.pause(0.001);                    t+=1
-
                     if np.linalg.norm(acclin) > tolgrav: #Prueba con gravity y vector aceleracion
                         coseno = np.dot(grav,acclin)/(np.linalg.norm(grav)*np.linalg.norm(acclin))
-                        if coseno < -0.90:
-                            caida = True
+                        if coseno < -0.90:  caida = True
                             #print("Caida! Coseno: "+ str(coseno)+ " norma: "+ str(np.linalg.norm(acclin)))
-                #----Segundo Detector------
+                #----Segundo Detector (ACELEROMETRO)------
                 #print(Acelerometro.getdA()[-1])
-                if Acelerometro.getdA().count(0)<999 and abs(Acelerometro.getdA()[-1]) > tolacel:
-                    caida1 = True; 
+                if Acelerometro.getdA().count(0)<999 and abs(Acelerometro.getdA()[-1]) > tolacel:   caida1 = True; 
                 #----Tercer Detector------
-                #if abs(Acelerometro.getdAngulo()[-1]) > tolang:
-                #    caida2 = True
+                #if abs(Acelerometro.getdAngulo()[-1]) > tolang:        #    caida2 = True
                 #--------Confirmacion de caida------------
                 if Giroscopio.getX().count(0)>999:
                     if (caida or caida1) and (not flag):
