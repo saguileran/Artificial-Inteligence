@@ -66,10 +66,10 @@ class Sensor:
             plt.scatter(t,float(self.getAngulo()[-1]), label= "dAngulo")
         else:
             plt.ylim([-100,100]); plt.xlabel("t"); plt.ylabel(self.getName())
-            plt.scatter(t,float(self.getdX()[-1]), c='b', label='dX')
-            plt.scatter(t,float(self.getdY()[-1]), c='g', label='dY')
-            plt.scatter(t,float(self.getdZ()[-1]), c='y', label='dZ')
-            plt.scatter(t,float(self.getdA()[-1]), c='r', label='dA')
+            plt.scatter(t,float(self.getdX()[-1]), s=5,c='b', label='dX')
+            plt.scatter(t,float(self.getdY()[-1]), s=5,c='g', label='dY')
+            plt.scatter(t,float(self.getdZ()[-1]), s=5, c='y', label='dZ')
+            plt.scatter(t,float(self.getdA()[-1]), s=20, c='r', label='dA' )
         plt.pause(0.001);
 
 #-----------Creando email-----------
@@ -111,7 +111,7 @@ GPS = Sensor(); Acelerometro = Sensor(); Giroscopio = Sensor()
 Gravedad = Sensor();#83
 Aceleracion_lineal= Sensor() #82
 t, i = 0, 0
-tolacel, tolgrav, tolang = 25, 10, 4
+tolacel, tolgrav, tolang = 20, 10, 4
 plt.xlabel("t"); plt.ylabel("Value")
 
 with raw(sys.stdin):
@@ -126,15 +126,8 @@ with raw(sys.stdin):
                 if Data.count(' 3')>0:  Acelerometro.Actualizando(float(Data[Data.index(' 3')+1]), float(Data[Data.index(' 3')+2]), float(Data[Data.index(' 3')+3]))
                 if Data.count(' 4')>0:  Giroscopio.Actualizando(float(Data[Data.index(' 4')+1]), float(Data[Data.index(' 4')+2]), float(Data[Data.index(' 4')+3] ))
 
-                #Acelerometro.Imagen(t, False); t+=1
-                plt.scatter(t,float(Acelerometro.getdX()[-1]), c='b', label='dX')
-                plt.scatter(t,float(Acelerometro.getdY()[-1]), c='g', label='dY')
-                plt.scatter(t,float(Acelerometro.getdZ()[-1]), c='y', label='dZ')
-                plt.scatter(t,float(Acelerometro.getdA()[-1]), c='r', label='dA')
-                plt.pause(0.001); t+=1
-
-        
-            
+                Acelerometro.Imagen(t, False); t+=1
+   
                 #--- Pruebas con el acelerometro lineal y la gravedad
                 if Data.count(' 83')>0 and Data.count(' 82')>0:
                     grav = np.array([float(Data[Data.index(' 83')+1]),float(Data[Data.index(' 83')+2]),float(Data[Data.index(' 83')+3])])
@@ -155,19 +148,19 @@ with raw(sys.stdin):
                 if Acelerometro.getdA().count(0)<999 and abs(Acelerometro.getdA()[-1]) > tolacel:
                     caida1 = True; 
                 #----Tercer Detector------
-                if abs(Acelerometro.getdAngulo()[-1]) > tolang:
-                    caida2 = True
+                #if abs(Acelerometro.getdAngulo()[-1]) > tolang:
+                #    caida2 = True
                 #--------Confirmacion de caida------------
-                if Giroscopio.getX().count(0)==1000:
+                if Giroscopio.getX().count(0)>999:
                     if (caida or caida1) and (not flag):
                         print("Atention, a fall has occured!")
                         #Email("Your grandparent has fallen at latitude {}, longitude {} and height  = {} the day {} at {} time. To locate this position go to https://www.gps-coordinates.net and enter the latitude and longitude.".format(GPS.getX()[-1], GPS.getY()[-1], GPS.getZ()[-1], str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]))
                         flag = True #Para no enviar mas correos
-                    else:
-                        if (caida and caida1) and (not flag):
-                            print("Atention, a fall has occured!")
-                            #Email("Your grandparent has fallen at latitude {}, longitude {} and height  = {} the day {} at {} time. To locate this position go to https://www.gps-coordinates.net and enter the latitude and longitude.".format(GPS.getX()[-1], GPS.getY()[-1], GPS.getZ()[-1], str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]))
-                            flag = True #Para no enviar mas correos
+                else:
+                    if (caida and caida1) and (not flag):
+                        print("Atention, a fall has occured!")
+                        #Email("Your grandparent has fallen at latitude {}, longitude {} and height  = {} the day {} at {} time. To locate this position go to https://www.gps-coordinates.net and enter the latitude and longitude.".format(GPS.getX()[-1], GPS.getY()[-1], GPS.getZ()[-1], str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]))
+                        flag = True #Para no enviar mas correos
                 #print(repr(keypressed))
                 
                 if keypressed=="x":
