@@ -164,9 +164,8 @@ with raw(sys.stdin):
             except IOError:
                 print('Not ready')
 
-location = './' #'/home/sebas/Documents/InteligenciaArtificial/Artificial-Inteligence/'
 #------------------Creating txt----------------
-file = open(location+"Data/"+str(datetime.datetime.now().date())+" - "+str(datetime.datetime.now().time())[:8]+".txt", 'w')
+file = open("./Data/"+str(datetime.datetime.now().date())+" - "+str(datetime.datetime.now().time())[:8]+".txt", 'w')
 file.write(" {} W {} W {} \n".format(Acelerometro.getX(), Acelerometro.getY(), Acelerometro.getZ()))
 file.write(" {} W {} W {} \n".format(Giroscopio.getX(), Giroscopio.getY() ,Giroscopio.getZ()))
 file.write(" {} W {} W {} \n".format(Gravedad.getX(), Gravedad.getY(), Gravedad.getZ()))
@@ -182,6 +181,6 @@ os.system("sudo git commit -m "+str(datetime.datetime.now().date())+"-"+str(date
 os.system("sudo git push")
 
 #plt.show()
-plt.savefig(location+"Pictures/"+str(datetime.datetime.now().date())+"-"+str(datetime.datetime.now().time())[:8]+".png")
+plt.savefig("./Pictures/"+str(datetime.datetime.now().date())+"-"+str(datetime.datetime.now().time())[:8]+".png")
 #plt.pause(0.1)
 plt.close()
