@@ -187,6 +187,7 @@ file.write(comment)
 file.close()
 #-----------------Uploading to git----------------
 #os.system("git remote set-url origin https://name:password@github.com/repo.git")
+os.system("sudo git pull")
 os.system("sudo git add --all")
 os.system("sudo git commit -m "+str(datetime.datetime.now().date())+"-"+str(datetime.datetime.now().time())[:8])
 os.system("sudo git push")
