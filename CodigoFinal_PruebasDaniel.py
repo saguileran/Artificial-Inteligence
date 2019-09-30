@@ -141,14 +141,17 @@ with raw(sys.stdin):
                     if np.linalg.norm(acclin) > tolgrav: #Prueba con gravity y vector aceleracion
                         coseno = np.dot(grav,acclin)/(np.linalg.norm(grav)*np.linalg.norm(acclin))
                         if coseno < -0.90:
+                            print("Detector 1 Activado")
                             caida = True
-                            print("Caida! Coseno: "+ str(coseno)+ " norma: "+ str(np.linalg.norm(acclin)))
+                            #print("Caida! Coseno: "+ str(coseno)+ " norma: "+ str(np.linalg.norm(acclin)))
                 #----Segundo Detector------
                 #print(Acelerometro.getdA()[-1])
                 if Acelerometro.getdA().count(0)<999 and abs(Acelerometro.getdA()[-1]) > tolacel:
                     caida1 = True;
+                    print("Detector 2 Activado")
                 #----Tercer Detector------
                 if abs(Acelerometro.getdAngulo()[-1]) > tolang:
+                    print("Detector 3 Activado")
                     caida2 = True
                 #--------Confirmacion de caida------------
                 if Giroscopio.getX().count(0)==1000:
