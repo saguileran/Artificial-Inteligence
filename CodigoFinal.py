@@ -159,10 +159,16 @@ with raw(sys.stdin):
                 if abs(Acelerometro.getdAngulo()[-1]) > tolang:
                     caida2 = True
                 #--------Confirmacion de caida------------
-                if (caida or caida1) and (not flag):
-                    print("Atention, a fall has occured!")
-                    #Email("Your grandparent has fallen at latitude {}, longitude {} and height  = {} the day {} at {} time. To locate this position go to https://www.gps-coordinates.net and enter the latitude and longitude.".format(GPS.getX()[-1], GPS.getY()[-1], GPS.getZ()[-1], str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]))
-                    flag = True #Para no enviar mas correos
+                if Giroscopio.getX().count(0)==1000:
+                    if (caida or caida1) and (not flag):
+                        print("Atention, a fall has occured!")
+                        #Email("Your grandparent has fallen at latitude {}, longitude {} and height  = {} the day {} at {} time. To locate this position go to https://www.gps-coordinates.net and enter the latitude and longitude.".format(GPS.getX()[-1], GPS.getY()[-1], GPS.getZ()[-1], str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]))
+                        flag = True #Para no enviar mas correos
+                    else:
+                        if (caida and caida1) and (not flag):
+                            print("Atention, a fall has occured!")
+                            #Email("Your grandparent has fallen at latitude {}, longitude {} and height  = {} the day {} at {} time. To locate this position go to https://www.gps-coordinates.net and enter the latitude and longitude.".format(GPS.getX()[-1], GPS.getY()[-1], GPS.getZ()[-1], str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]))
+                            flag = True #Para no enviar mas correos
                 #print(repr(keypressed))
                 if keypressed=="x":
                     break
