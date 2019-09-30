@@ -98,7 +98,7 @@ Subject: %s
 
 #-------------Creando conexion-------------------
 
-UDP_IP_ADDRESS = "192.168.1.13"
+UDP_IP_ADDRESS = "192.168.1.255"
 UDP_PORT_NO = 5555
 
 serverSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -126,8 +126,8 @@ with raw(sys.stdin):
                 if Data.count(' 3')>0:  Acelerometro.Actualizando(float(Data[Data.index(' 3')+1]), float(Data[Data.index(' 3')+2]), float(Data[Data.index(' 3')+3]))
                 if Data.count(' 4')>0:  Giroscopio.Actualizando(float(Data[Data.index(' 4')+1]), float(Data[Data.index(' 4')+2]), float(Data[Data.index(' 4')+3] ))
 
-                Acelerometro.Imagen(t); t+=1
-            
+                #Acelerometro.Imagen(t); t+=1
+
                 #--- Pruebas con el acelerometro lineal y la gravedad
                 if Data.count(' 83')>0 and Data.count(' 82')>0:
                     grav = np.array([float(Data[Data.index(' 83')+1]),float(Data[Data.index(' 83')+2]),float(Data[Data.index(' 83')+3])])
@@ -146,7 +146,7 @@ with raw(sys.stdin):
                 #----Segundo Detector------
                 #print(Acelerometro.getdA()[-1])
                 if Acelerometro.getdA().count(0)<999 and abs(Acelerometro.getdA()[-1]) > tolacel:
-                    caida1 = True; 
+                    caida1 = True;
                 #----Tercer Detector------
                 if abs(Acelerometro.getdAngulo()[-1]) > tolang:
                     caida2 = True
@@ -162,13 +162,13 @@ with raw(sys.stdin):
                             #Email("Your grandparent has fallen at latitude {}, longitude {} and height  = {} the day {} at {} time. To locate this position go to https://www.gps-coordinates.net and enter the latitude and longitude.".format(GPS.getX()[-1], GPS.getY()[-1], GPS.getZ()[-1], str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]))
                             flag = True #Para no enviar mas correos
                 #print(repr(keypressed))
-                
+
                 if keypressed=="x":
                     break
             except IOError:
                 print('Not ready')
 
-location ='/home/sebas/Documents/InteligenciaArtificial/Artificial-Inteligence/'
+location ='./'
 #------------------Creating txt----------------
 file = open(location+"Data/"+str(datetime.datetime.now().date())+" - "+str(datetime.datetime.now().time())[:8]+".txt", 'w')
 file.write(" {} W {} W {} \n".format(Acelerometro.getX(), Acelerometro.getY(), Acelerometro.getZ()))
