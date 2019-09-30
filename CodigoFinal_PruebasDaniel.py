@@ -183,5 +183,5 @@ os.system("sudo git push")
 
 #plt.show()
 plt.savefig(location+"Pictures/"+str(datetime.datetime.now().date())+"-"+str(datetime.datetime.now().time())[:8]+".png")
-#plt.pause(0.1)
+plt.pause(0.1)
 plt.close()
