@@ -180,7 +180,7 @@ os.system("sudo git add --all")
 os.system("sudo git commit -m "+str(datetime.datetime.now().date())+"-"+str(datetime.datetime.now().time())[:8])
 os.system("sudo git push")
 
-#plt.show()
+plt.show()
 plt.savefig("./Pictures/"+str(datetime.datetime.now().date())+"-"+str(datetime.datetime.now().time())[:8]+".png")
 plt.pause(0.001)
 plt.close()
