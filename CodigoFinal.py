@@ -111,7 +111,7 @@ GPS = Sensor(); Acelerometro = Sensor(); Giroscopio = Sensor()
 Gravedad = Sensor();#83
 Aceleracion_lineal= Sensor() #82
 t, i = 0, 0
-tolacel, tolgrav, tolang = 20, 10, 4
+tolacel, tolgrav, tolang = 18, 10, 4
 plt.xlabel("t"); plt.ylabel("Value")
 
 with raw(sys.stdin):
