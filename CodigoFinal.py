@@ -96,8 +96,9 @@ GPS = Sensor(); Acelerometro = Sensor(); Giroscopio = Sensor()
 Gravedad = Sensor();#83
 Aceleracion_lineal= Sensor() #82
 t, i = 0, 0
-tolacel, tolgrav, tolang = 15, 9, 4
-
+tolacel, tolgrav, tolang = 30, 9, 4
+plt.legend(loc='upper left');
+plt.ylim([-50,50])
 with raw(sys.stdin):
     with nonblocking(sys.stdin):
         while True:
@@ -111,8 +112,11 @@ with raw(sys.stdin):
                 if Data.count(' 4')>0:  Giroscopio.Actualizando(float(Data[Data.index(' 4')+1]), float(Data[Data.index(' 4')+2]), float(Data[Data.index(' 4')+3] ))
 
                 #print(Acelerometro.getdAngulo()[-1])
-                #plt.scatter(t,float(Acelerometro.getdZ()[-1]))
-                #plt.pause(0.001); t+=1
+                plt.scatter(t,float(Acelerometro.getdX()[-1]), c='b', label='dX')
+                plt.scatter(t,float(Acelerometro.getdY()[-1]), c='g', label='dY')
+                plt.scatter(t,float(Acelerometro.getdZ()[-1]), c='y', label='dZ')
+                plt.scatter(t,float(Acelerometro.getdA()[-1]), c='r', label='dA')
+                plt.pause(0.001); t+=1
 
                 #--- Pruebas con el acelerometro lineal y la gravedad
                 if Data.count(' 83')>0 and Data.count(' 82')>0:
@@ -130,7 +134,7 @@ with raw(sys.stdin):
                             caida = True
                             #print("Caida! Coseno: "+ str(coseno)+ " norma: "+ str(np.linalg.norm(acclin)))
                 #----Segundo Detector------
-                print(Acelerometro.getdA()[-1])
+                #print(Acelerometro.getdA()[-1])
                 if Acelerometro.getdA().count(0)<999 and abs(Acelerometro.getdA()[-1]) > tolacel:
                     caida1 = True
                 #----Tercer Detector------
@@ -163,7 +167,6 @@ os.system("sudo git add .")
 os.system("sudo git commit -m "+str(datetime.datetime.now().time()))
 os.system("sudo git push origin master")
 #os.system("saguileran")  #usuario
-
 
 
 plt.show()
