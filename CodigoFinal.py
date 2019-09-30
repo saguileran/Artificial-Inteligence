@@ -43,6 +43,7 @@ class Sensor:
     def getdZ(self): return(self.dZ)
     def getdA(self): return(self.dA)
     def getdAngulo(self): return(self.dAngulo)
+    def getName(self): return(str(__name__ ))
 
     def Actualizando(self,x1, y1, z1):
         x,y,z = float(x1), float(y1), float(z1)
@@ -58,7 +59,7 @@ class Sensor:
         self.dAngulo.append(self.Angulo[-1]-self.Angulo[-2])
 
     def Imagen(self, t):
-        plt.ylim([-100,100]); plt.xlabel("t"); plt.ylabel("Value")
+        plt.ylim([-100,100]); plt.xlabel("t"); plt.ylabel(self.getName())
         if t==1: plt.legend(loc='upper left');
         plt.scatter(t,float(self.getdX()[-1]), c='b', label='dX')
         plt.scatter(t,float(self.getdY()[-1]), c='g', label='dY')
@@ -153,8 +154,7 @@ with raw(sys.stdin):
                 if abs(Acelerometro.getdAngulo()[-1]) > tolang:
                     caida2 = True
                 #--------Confirmacion de caida------------
-               # if caida and (not flag) and caida1 and caida2:
-                if caida1 and (not flag):
+                if caida and (not flag) and caida1 and caida2:
                     print("Atention, a fall has occured!")
                     #Email("Your grandparent has fallen at latitude {}, longitude {} and height  = {} the day {} at {} time. To locate this position go to https://www.gps-coordinates.net and enter the latitude and longitude.".format(GPS.getX()[-1], GPS.getY()[-1], GPS.getZ()[-1], str(datetime.datetime.now().date()) , str(datetime.datetime.now().time())[:8]))
                     flag = True #Para no enviar mas correos
@@ -177,10 +177,10 @@ file.close()
 #-----------------Uploading to git----------------
 
 os.system("sudo git add --all")
-os.system("sudo git commit -m "+str(datetime.datetime.now().date())+" - "+str(datetime.datetime.now().time())[:8])
-os.system("sudo git push origin master")
+os.system("sudo git commit -m "+str(datetime.datetime.now().date())+"-"+str(datetime.datetime.now().time())[:8])
+os.system("sudo git push")
 
 #plt.show()
-plt.savefig(location+"Pictures/"+str(datetime.datetime.now().date())+" - "+str(datetime.datetime.now().time())[:8]+".png")
+plt.savefig(location+"Pictures/"+str(datetime.datetime.now().date())+"-"+str(datetime.datetime.now().time())[:8]+".png")
 #plt.pause(0.1)
 plt.close()
