@@ -164,7 +164,7 @@ with raw(sys.stdin):
             except IOError:
                 print('Not ready')
 
-location ='/home/sebas/Documents/InteligenciaArtificial/Artificial-Inteligence/'
+location = './' #'/home/sebas/Documents/InteligenciaArtificial/Artificial-Inteligence/'
 #------------------Creating txt----------------
 file = open(location+"Data/"+str(datetime.datetime.now().date())+" - "+str(datetime.datetime.now().time())[:8]+".txt", 'w')
 file.write(" {} W {} W {} \n".format(Acelerometro.getX(), Acelerometro.getY(), Acelerometro.getZ()))
