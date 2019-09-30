@@ -111,7 +111,7 @@ GPS = Sensor(); Acelerometro = Sensor(); Giroscopio = Sensor()
 Gravedad = Sensor();#83
 Aceleracion_lineal= Sensor() #82
 t, i = 0, 0
-tolacel, tolgrav, tolang = 18, 10, 4
+tolacel, tolgrav, tolang = 16, 10, 4
 plt.xlabel("t"); plt.ylabel("Value")
 
 with raw(sys.stdin):
@@ -182,5 +182,5 @@ os.system("sudo git push")
 
 plt.show()
 plt.savefig("./Pictures/"+str(datetime.datetime.now().date())+"-"+str(datetime.datetime.now().time())[:8]+".png")
-plt.pause(0.1)
+plt.pause(0.001)
 plt.close()
