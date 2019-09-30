@@ -153,7 +153,9 @@ file = open(str(datetime.datetime.now().date())+" - "+str(datetime.datetime.now(
 file.write(" {} W {} W {} \n".format(Acelerometro.getX(), Acelerometro.getY(), Acelerometro.getZ()))
 file.write(" {} W {} W {} \n".format(Giroscopio.getX(), Giroscopio.getY() ,Giroscopio.getZ()))
 file.write(" {} W {} W {} \n".format(Gravedad.getX(), Gravedad.getY(), Gravedad.getZ()))
-file.write(" {} W {} W {} \n".format(Aceleracion_lineal.getX(), Aceleracion_lineal.getY(), Aceleracion_lineal.getZ()))  
+file.write(" {} W {} W {} \n".format(Aceleracion_lineal.getX(), Aceleracion_lineal.getY(), Aceleracion_lineal.getZ()))
+comment = input("Insert comment")
+file.write(comment)
 file.close()
 #-----------------Uploading to git----------------
 
