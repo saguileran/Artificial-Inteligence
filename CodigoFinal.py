@@ -96,7 +96,7 @@ GPS = Sensor(); Acelerometro = Sensor(); Giroscopio = Sensor()
 Gravedad = Sensor();#83
 Aceleracion_lineal= Sensor() #82
 t, i = 0, 0
-tolacel, tolgrav, tolang = 3, 9, 4
+tolacel, tolgrav, tolang = 15, 9, 4
 
 with raw(sys.stdin):
     with nonblocking(sys.stdin):
@@ -130,8 +130,8 @@ with raw(sys.stdin):
                             caida = True
                             #print("Caida! Coseno: "+ str(coseno)+ " norma: "+ str(np.linalg.norm(acclin)))
                 #----Segundo Detector------
-                print(Acelerometro.getdZ()[-1])
-                if Acelerometro.getdZ().count(0)<999 and abs(Acelerometro.getdZ()[-1]) > tolacel:
+                print(Acelerometro.getdA()[-1])
+                if Acelerometro.getdA().count(0)<999 and abs(Acelerometro.getdA()[-1]) > tolacel:
                     caida1 = True
                 #----Tercer Detector------
                 if abs(Acelerometro.getdAngulo()[-1]) > tolang:
@@ -149,7 +149,7 @@ with raw(sys.stdin):
                 print('Not ready')
 
 #------------------Creating txt----------------
-file = open(str(datetime.datetime.now().time())+".txt", 'w')
+file = open(str(datetime.datetime.now().date())+" - "+str(datetime.datetime.now().time())[:8]+".txt", 'w')
 file.write(" {} W {} W {} \n".format(Acelerometro.getX(), Acelerometro.getY(), Acelerometro.getZ()))
 file.write(" {} W {} W {} \n".format(Giroscopio.getX(), Giroscopio.getY() ,Giroscopio.getZ()))
 file.write(" {} W {} W {} \n".format(Gravedad.getX(), Gravedad.getY(), Gravedad.getZ()))
