@@ -166,10 +166,10 @@ file.close()
 #-----------------Uploading to git----------------
 
 os.system("sudo git add --all")
-os.system("sudo git commit -m "+str(datetime.datetime.now().time()))
+os.system("sudo git commit -m "+str(datetime.datetime.now().date())+" - "+str(datetime.datetime.now().time())[:8])
 os.system("sudo git push origin master")
 #os.system("saguileran")  #usuario
 plt.show()
 plt.savefig(location+"Pictures/"+str(datetime.datetime.now().date())+" - "+str(datetime.datetime.now().time())[:8]+".png")
-plt.pause(1)
-plt.clse()
+plt.pause(0.1)
+plt.close()
